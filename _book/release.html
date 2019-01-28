@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 4 Package metadata | R packages</title>
+  <title>Chapter 15 Releasing a package | R packages</title>
   <meta name="description" content="This is the book site for “R packages”.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 4 Package metadata | R packages" />
+  <meta property="og:title" content="Chapter 15 Releasing a package | R packages" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Package metadata | R packages" />
+  <meta name="twitter:title" content="Chapter 15 Releasing a package | R packages" />
   
   <meta name="twitter:description" content="This is the book site for “R packages”." />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="r.html">
-<link rel="next" href="man.html">
+<link rel="prev" href="check.html">
+<link rel="next" href="congratulations.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -389,286 +389,429 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="description" class="section level1">
-<h1><span class="header-section-number">Chapter 4</span> Package metadata</h1>
-<p>The job of the <code>DESCRIPTION</code> file is to store important metadata about your package. When you first start writing packages, you’ll mostly use these metadata to record what packages are needed to run your package. However, as time goes by and you start sharing your package with others, the metadata file becomes increasingly important because it specifies who can use it (the license) and whom to contact (you!) if there are any problems.</p>
-<p>Every package must have a <code>DESCRIPTION</code>. In fact, it’s the defining feature of a package (RStudio and devtools consider any directory containing <code>DESCRIPTION</code> to be a package). To get you started, <code>devtools::create(&quot;mypackage&quot;)</code> automatically adds a bare-bones description file. This will allow you to start writing the package without having to worry about the metadata until you need to. The minimal description will vary a bit depending on your settings, but should look something like this:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Package:</span><span class="at"> mypackage</span>
-<span class="fu">Title:</span><span class="at"> What The Package Does (one line, title case required)</span>
-<span class="fu">Version:</span><span class="at"> 0.1</span>
-<span class="fu">Authors@R:</span><span class="at"> person(&quot;First&quot;, &quot;Last&quot;, email = &quot;first.last@example.com&quot;,</span>
-                  role = c(<span class="st">&quot;aut&quot;</span>, <span class="st">&quot;cre&quot;</span>))
-<span class="fu">Description:</span><span class="at"> What the package does (one paragraph)</span>
-<span class="fu">Depends:</span><span class="at"> R (&gt;= 3.1.0)</span>
-<span class="fu">License:</span><span class="at"> What license is it under?</span>
-<span class="fu">LazyData:</span><span class="at"> true</span></code></pre>
-<p>(If you’re writing a lot of packages, you can set global options via <code>devtools.desc.author</code>, <code>devtools.desc.license</code>, <code>devtools.desc.suggests</code>, and <code>devtools.desc</code>. See <code>package?devtools</code> for more details.)</p>
-<p><code>DESCRIPTION</code> uses a simple file format called DCF, the Debian control format. You can see most of the structure in the simple example below. Each line consists of a <strong>field</strong> name and a value, separated by a colon. When values span multiple lines, they need to be indented:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Description:</span><span class="at"> The description of a package is usually long,</span>
-    spanning multiple lines. The second and subsequent lines
-    should be indented, usually with four spaces.</code></pre>
-<p>This chapter will show you how to use the most important <code>DESCRIPTION</code> fields.</p>
-<div id="dependencies" class="section level2">
-<h2><span class="header-section-number">4.1</span> Dependencies: What does your package need?</h2>
-<p>It’s the job of the <code>DESCRIPTION</code> to list the packages that your package needs to work. R has a rich set of ways of describing potential dependencies. For example, the following lines indicate that your package needs both ggvis and dplyr to work:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Imports:</span>
-    dplyr,
-    ggvis</code></pre>
-<p>Whereas, the lines below indicate that while your package can take advantage of ggvis and dplyr, they’re not required to make it work:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Suggests:</span>
-    dplyr,
-    ggvis</code></pre>
-<p>Both <code>Imports</code> and <code>Suggests</code> take a comma separated list of package names. I recommend putting one package on each line, and keeping them in alphabetical order. That makes it easy to skim.</p>
-<p><code>Imports</code> and <code>Suggests</code> differ in their strength of dependency:</p>
+<div id="release" class="section level1">
+<h1><span class="header-section-number">Chapter 15</span> Releasing a package</h1>
+<p>If you want your package to have significant traction in the R community, you need to submit it to CRAN. Submitting to CRAN is a lot more work than just providing a version on github, but the vast majority of R users do not install packages from github, because CRAN provides discoverability, ease of installation and a stamp of authenticity. The CRAN submission process can be frustrating, but it’s worthwhile, and this chapter will make it as painless as possible.</p>
+<p>To get your package ready to release, follow these steps:</p>
+<ol style="list-style-type: decimal">
+<li>Pick a version number.</li>
+<li>Run and document <code>R CMD check</code>.</li>
+<li>Check that you’re aligned with CRAN policies.</li>
+<li>Update <code>README.md</code> and <code>NEWS.md</code>.</li>
+<li>Submit the package to CRAN.</li>
+<li>Prepare for the next version by updating version numbers.</li>
+<li>Publicise the new version.</li>
+</ol>
+<div id="release-version" class="section level2">
+<h2><span class="header-section-number">15.1</span> Version number</h2>
+<p>If you’ve been following the advice in <a href="description.html#version">versioning</a>, the version number of your in-development package will have four components, <code>major.minor.patch.dev</code>, where <code>dev</code> is at least 9000. The number 9000 is arbitrary, but provides a strong visual signal there’s something different about this version number. Released packages don’t have a <code>dev</code> component, so now you need to drop that and pick a version number based on the changes you’ve made. For example, if the current version is <code>0.8.1.9000</code> will the next CRAN version be <code>0.8.2</code>, <code>0.9.0</code> or <code>1.0.0</code>? Use this advice to decide:</p>
 <ul>
-<li><p><code>Imports</code>: packages listed here <em>must</em> be present for your package to
-work. In fact, any time your package is installed, those packages will, if
-not already present, be installed on your computer (<code>devtools::load_all()</code>
-also checks that the packages are installed).</p>
-<p>Adding a package dependency here ensures that it’ll be installed. However,
-it does <em>not</em> mean that it will be attached along with your package (i.e.,
-<code>library(x)</code>). The best practice is to explicitly refer to external
-functions using the syntax <code>package::function()</code>. This makes it very easy to
-identify which functions live outside of your package. This is especially
-useful when you read your code in the future.</p>
-<p>If you use a lot of functions from other packages this is rather
-verbose. There’s also a minor performance penalty associated with <code>::</code>
-(on the order of 5µs, so it will only matter if you call the function
-millions of times). You’ll learn about alternative ways to call functions
-in other packages in <a href="namespace.html#imports">namespace imports</a>.</p></li>
-<li><p><code>Suggests</code>: your package can use these packages, but doesn’t require them.
-You might use suggested packages for example datasets, to run tests,
-build vignettes, or maybe there’s only one function that needs the package.</p>
-<p>Packages listed in <code>Suggests</code> are not automatically installed along with
-your package. This means that you need to check if the package is available
-before using it (use <code>requireNamespace(x, quietly = TRUE)</code>). There are
-two basic scenarios:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># You need the suggested package for this function    </span>
-my_fun &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) {
-  <span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">&quot;pkg&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)) {
-    <span class="kw">stop</span>(<span class="st">&quot;Package </span><span class="ch">\&quot;</span><span class="st">pkg</span><span class="ch">\&quot;</span><span class="st"> needed for this function to work. Please install it.&quot;</span>,
+<li><p>Increment <code>patch</code>, e.g. <code>0.8.2</code> for a <strong>patch</strong>: you’ve fixed
+bugs without adding any significant new features. I’ll often do a patch
+release if, after release, I discover a show-stopping bug that needs to be
+fixed ASAP. Most releases will have a patch number of 0.</p></li>
+<li><p>Increment <code>minor</code>, e.g. <code>0.9.0</code>, for a <strong>minor release</strong>. A minor
+release can include bug fixes, new features and changes in backward
+compatibility. This is the most common type of release. It’s perfectly fine to
+have so many minor releases that you need to use two (or even three!)
+digits, e.g. <code>1.17.0</code>.</p></li>
+<li><p>Increment <code>major</code>, e.g. <code>1.0.0</code>, for a <strong>major release</strong>. This is
+best reserved for changes that are not backward compatible and that are
+likely to affect many users. Going from <code>0.b.c</code> to <code>1.0.0</code> typically
+indicates that your package is feature complete with a stable API.</p>
+<p>In practice, backward compatibility is not an all-or-nothing threshold. For
+example, if you make an API-incompatible change to a rarely-used part of
+your code, it may not deserve a major number change. But if you fix a bug
+that many people depend on, it will feel like an API breaking change. Use
+your best judgement.</p></li>
+</ul>
+</div>
+<div id="compatibility" class="section level2">
+<h2><span class="header-section-number">15.2</span> Backward compatibility</h2>
+<p>The big difference between major and minor versions is whether or not the code is backward compatible. This difference is a bit academic in the R community because the way most people update packages is by running <code>update.packages()</code>, which always updates to the latest version of the package, even if the major version has changed, potentially breaking code. While more R users are becoming familiar with tools like <a href="http://rstudio.github.io/packrat/">packrat</a>, which capture package versions on a per-project basis, you do need to be a little cautious when making big backward incompatible changes, regardless of what you do with the version number.</p>
+<p>The importance of backward compatibility is directly proportional to the number of people using your package: you are trading your time for your users’ time. The harder you strive to maintain backward compatibility, the harder it is to develop new features or fix old mistakes. Backward compatible code also tends to be harder to read because of the need to maintain multiple paths to support functionality from previous versions. Be concerned about backward compatibility, but don’t let it paralyse you.</p>
+<p>There are good reasons to make backward incompatible changes - if you made a design mistake that makes your package harder to use it’s better to fix it sooner rather than later. If you do need to make a backward incompatible change, it’s best to do it gradually. Provide interim version(s) between where are you now and where you’d like to be, and provide advice about what’s going to change. Depending on what you’re changing, use one of the following techniques to let your users know what’s happening:</p>
+<ul>
+<li><p>Don’t immediately remove a function. First deprecate it. For example,
+imagine your package is version <code>0.5.0</code> and you want to remove <code>fun()</code>. In
+version, <code>0.6.0</code>, you’d use <code>.Deprecated()</code> to display a warning message
+whenever someone uses the function:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 0.6.0</span>
+fun &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, z) {
+  <span class="kw">.Deprecated</span>(<span class="st">&quot;sum&quot;</span>)
+  x <span class="op">+</span><span class="st"> </span>y <span class="op">+</span><span class="st"> </span>z
+}
+
+<span class="kw">fun</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre>
+<pre><code>## Warning: &#39;fun&#39; is deprecated.
+## Use &#39;sum&#39; instead.
+## See help(&quot;Deprecated&quot;)</code></pre>
+<pre><code>## [1] 6</code></pre>
+<p>Then, remove the function once you got to <code>0.7.0</code> (or if you are
+being very strict, once you got to <code>1.0.0</code> since it’s a backward
+incompatible change).</p></li>
+<li><p>Similarly, if you’re removing a function argument, first warn about it:</p>
+<pre class="sourceCode r"><code class="sourceCode r">bar &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, z) {
+  <span class="cf">if</span> (<span class="op">!</span><span class="kw">missing</span>(y)) {
+    <span class="kw">warning</span>(<span class="st">&quot;argument y is deprecated; please use z instead.&quot;</span>, 
       <span class="dt">call. =</span> <span class="ot">FALSE</span>)
+    z &lt;-<span class="st"> </span>y
   }
 }
 
-<span class="co"># There&#39;s a fallback method if the package isn&#39;t available</span>
-my_fun &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) {
-  <span class="cf">if</span> (<span class="kw">requireNamespace</span>(<span class="st">&quot;pkg&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)) {
-    pkg<span class="op">::</span><span class="kw">f</span>()
-  } <span class="cf">else</span> {
-    <span class="kw">g</span>()
+<span class="kw">bar</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre>
+<pre><code>## Warning: argument y is deprecated; please use z instead.</code></pre></li>
+<li><p>If you’re deprecating a lot of code, it can be useful to add a helper
+function. For example, ggplot2 has <code>gg_dep</code> which automatically
+displays a message, warning or error, depending on how much the version
+number has changed.</p>
+<pre class="sourceCode r"><code class="sourceCode r">gg_dep &lt;-<span class="st"> </span><span class="cf">function</span>(version, msg) {
+  v &lt;-<span class="st"> </span><span class="kw">as.package_version</span>(version)
+  cv &lt;-<span class="st"> </span><span class="kw">packageVersion</span>(<span class="st">&quot;ggplot2&quot;</span>)
+
+  <span class="co"># If current major number is greater than last-good major number, or if</span>
+  <span class="co"># current minor number is more than 1 greater than last-good minor number,</span>
+  <span class="co"># return an error.</span>
+  <span class="cf">if</span> (cv[[<span class="dv">1</span>,<span class="dv">1</span>]] <span class="op">&gt;</span><span class="st"> </span>v[[<span class="dv">1</span>,<span class="dv">1</span>]]  <span class="op">||</span><span class="st">  </span>cv[[<span class="dv">1</span>,<span class="dv">2</span>]] <span class="op">&gt;</span><span class="st"> </span>v[[<span class="dv">1</span>,<span class="dv">2</span>]] <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) {
+    <span class="kw">stop</span>(msg, <span class="st">&quot; (Defunct; last used in version &quot;</span>, version, <span class="st">&quot;)&quot;</span>,
+      <span class="dt">call. =</span> <span class="ot">FALSE</span>)
+
+  <span class="co"># If minor number differs by one, give a warning</span>
+  } <span class="cf">else</span> <span class="cf">if</span> (cv[[<span class="dv">1</span>,<span class="dv">2</span>]] <span class="op">&gt;</span><span class="st"> </span>v[[<span class="dv">1</span>,<span class="dv">2</span>]]) {
+    <span class="kw">warning</span>(msg, <span class="st">&quot; (Deprecated; last used in version &quot;</span>, version, <span class="st">&quot;)&quot;</span>,
+      <span class="dt">call. =</span> <span class="ot">FALSE</span>)
+
+  <span class="co"># If only subminor number is greater, provide a message</span>
+  } <span class="cf">else</span> <span class="cf">if</span> (cv[[<span class="dv">1</span>,<span class="dv">3</span>]] <span class="op">&gt;</span><span class="st"> </span>v[[<span class="dv">1</span>,<span class="dv">3</span>]]) {
+    <span class="kw">message</span>(msg, <span class="st">&quot; (Deprecated; last used in version &quot;</span>, version, <span class="st">&quot;)&quot;</span>)
   }
+
+  <span class="kw">invisible</span>()
 }</code></pre></li>
+<li><p>Significant changes to an existing function requires planning, including
+making gradual changes over multiple versions. Try and develop a sequence
+of transformations where each change can be accompanied by an informative
+error message.</p></li>
+<li><p>If you want to use functionality in a new version of another package,
+don’t make it a hard install-time dependency in the <code>DESCRIPTION</code> (forcing
+your users to upgrade that package might break other code). Instead
+check for the version at run-time:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="kw">packageVersion</span>(<span class="st">&quot;ggplot2&quot;</span>) <span class="op">&lt;</span><span class="st"> &quot;1.0.0&quot;</span>) {
+  <span class="kw">stop</span>(<span class="st">&quot;ggplot2 &gt;= 1.0.0 needed for this function.&quot;</span>, <span class="dt">call. =</span> <span class="ot">FALSE</span>)
+}</code></pre>
+<p>This is also useful if you’re responding to changes in one of your
+dependencies - you’ll want to have a version that will work both before
+and after the change. This will allow you to submit it to CRAN at any time,
+even before the other package. Doing this may generate some <code>R CMD check</code>
+notes. For example:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="kw">packageVersion</span>(<span class="st">&quot;foo&quot;</span>) <span class="op">&gt;</span><span class="st"> &quot;1.0.0&quot;</span>) {
+  foo<span class="op">::</span><span class="kw">baz</span>()
+} <span class="cf">else</span> {
+  foo<span class="op">::</span><span class="kw">bar</span>()
+}</code></pre>
+<p>If <code>baz</code> doesn’t exist in foo version 1.0.0, you’ll get a note that
+it doesn’t exist in foo’s namespace. Just explain that you’re working
+around a difference between versions in your submission to CRAN.</p></li>
 </ul>
-<p>When developing packages locally, you never need to use <code>Suggests</code>. When releasing your package, using <code>Suggests</code> is a courtesy to your users. It frees them from downloading rarely needed packages, and lets them get started with your package as quickly as possible.</p>
-<p>The easiest way to add <code>Imports</code> and <code>Suggests</code> to your package is to use <code>devtools::use_package()</code>. This automatically puts them in the right place in your <code>DESCRIPTION</code>, and reminds you how to use them.</p>
-<pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">use_package</span>(<span class="st">&quot;dplyr&quot;</span>) <span class="co"># Defaults to imports</span>
-<span class="co">#&gt; Adding dplyr to Imports</span>
-<span class="co">#&gt; Refer to functions with dplyr::fun()</span>
-devtools<span class="op">::</span><span class="kw">use_package</span>(<span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;Suggests&quot;</span>)
-<span class="co">#&gt; Adding dplyr to Suggests</span>
-<span class="co">#&gt; Use requireNamespace(&quot;dplyr&quot;, quietly = TRUE) to test if package is </span>
-<span class="co">#&gt;  installed, then use dplyr::fun() to refer to functions.</span></code></pre>
-<div id="versioning" class="section level3">
-<h3><span class="header-section-number">4.1.1</span> Versioning</h3>
-<p>If you need a specific version of a package, specify it in parentheses after the package name:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Imports:</span>
-    ggvis (&gt;= 0.2),
-    dplyr (&gt;= 0.3.0.1)
-<span class="fu">Suggests:</span>
-    MASS (&gt;= 7.3.0)</code></pre>
-<p>You almost always want to specify a minimum version rather than an exact version (<code>MASS (== 7.3.0)</code>). Since R can’t have multiple versions of the same package loaded at the same time, specifying an exact dependency dramatically increases the chance of conflicting versions.</p>
-<p>Versioning is most important when you release your package. Usually people don’t have exactly the same versions of packages installed that you do. If someone has an older package that doesn’t have a function your package needs, they’ll get an unhelpful error message. However, if you supply the version number, they’ll get a error message that tells them exactly what the problem is: an out of date package.</p>
-<p>Generally, it’s always better to specify the version and to be conservative about which version to require. Unless you know otherwise, always require a version greater than or equal to the version you’re currently using.</p>
 </div>
-<div id="other-dependencies" class="section level3">
-<h3><span class="header-section-number">4.1.2</span> Other dependencies</h3>
-<p>There are three other fields that allow you to express more specialised dependencies:</p>
-<ul>
-<li><p><code>Depends</code>: Prior to the rollout of namespaces in R 2.14.0, <code>Depends</code> was
-the only way to “depend” on another package. Now, despite the name, you
-should almost always use <code>Imports</code>, not <code>Depends</code>. You’ll learn why, and
-when you should still use <code>Depends</code>, in <a href="namespace.html#namespace">namespaces</a>.</p>
-<p>You can also use <code>Depends</code> to require a specific version of R, e.g.
-<code>Depends: R (&gt;= 3.0.1)</code>. As with packages, it’s a good idea to
-play it safe and require a version greater than or equal to the version
-you’re currently using. <code>devtools::create()</code> will do this for you.</p>
-<p>In R 3.1.1 and earlier you’ll also need to use <code>Depends: methods</code> if
-you use S4. This bug is fixed in R 3.2.0, so methods can go back to
-<code>Imports</code> where they belong.</p></li>
-<li><p><code>LinkingTo</code>: packages listed here rely on C or C++ code in another package.
-You’ll learn more about <code>LinkingTo</code> in <a href="src.html#src">compiled code</a>.</p></li>
-<li><p><code>Enhances</code>: packages listed here are “enhanced” by your package. Typically,
-this means you provide methods for classes defined in another package (a
-sort of reverse <code>Suggests</code>). But it’s hard to define what that means, so I
-don’t recommend using <code>Enhances</code>.</p></li>
-</ul>
-<p>You can also list things that your package needs outside of R in the <code>SystemRequirements</code> field. But this is just a plain text field and is not automatically checked. Think of it as a quick reference; you’ll also need to include detailed system requirements (and how to install them) in your README.</p>
-</div>
-</div>
-<div id="pkg-description" class="section level2">
-<h2><span class="header-section-number">4.2</span> Title and description: What does your package do?</h2>
-<p>The title and description fields describe what the package does. They differ only in length:</p>
-<ul>
-<li><p><code>Title</code> is a one line description of the package, and is often shown in
-package listing. It should be plain text (no markup), capitalised like a
-title, and NOT end in a period. Keep it short: listings will often
-truncate the title to 65 characters.</p></li>
-<li><p><code>Description</code> is more detailed than the title. You can use multiple sentences
-but you are limited to one paragraph. If your description spans multiple
-lines (and it should!), each line must be no more than 80 characters wide.
-Indent subsequent lines with 4 spaces.</p></li>
-</ul>
-<p>The <code>Title</code> and <code>Description</code> for ggplot2 are:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Title:</span><span class="at"> An implementation of the Grammar of Graphics</span>
-<span class="fu">Description:</span><span class="at"> An implementation of the grammar of graphics in R. It combines </span>
-    <span class="fu">the advantages of both base and lattice graphics:</span><span class="at"> conditioning and shared </span>
-    axes are handled automatically, and you can still build up a plot step 
-    by step from multiple data sources. It also implements a sophisticated 
-    multidimensional conditioning system and a consistent interface to map
-    data to aesthetic attributes. See the ggplot2 website for more information, 
-    documentation and examples.</code></pre>
-<p>A good title and description are important, especially if you plan to release your package to CRAN because they appear on the CRAN download page as follows:</p>
-<pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;diagrams/cran-package.png&quot;</span>)</code></pre>
-<p><img src="diagrams/cran-package.png" /><!-- --></p>
-<p>Because <code>Description</code> only gives you a small amount of space to describe what your package does, I also recommend including a <code>README.md</code> file that goes into much more depth and shows a few examples. You’ll learn about that in <a href="release.html#readme">README.md</a>.</p>
-</div>
-<div id="author" class="section level2">
-<h2><span class="header-section-number">4.3</span> Author: who are you?</h2>
-<p>To identify the package’s author, and whom to contact if something goes wrong, use the <code>Authors@R</code> field. This field is unusual because it contains executable R code rather than plain text. Here’s an example:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Authors@R:</span><span class="at"> person(&quot;Hadley&quot;, &quot;Wickham&quot;, email = &quot;hadley@rstudio.com&quot;,</span>
-  role = c(<span class="st">&quot;aut&quot;</span>, <span class="st">&quot;cre&quot;</span>))</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">person</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Wickham&quot;</span>, <span class="dt">email =</span> <span class="st">&quot;hadley@rstudio.com&quot;</span>, 
-  <span class="dt">role =</span> <span class="kw">c</span>(<span class="st">&quot;aut&quot;</span>, <span class="st">&quot;cre&quot;</span>))</code></pre>
-<pre><code>## [1] &quot;Hadley Wickham &lt;hadley@rstudio.com&gt; [aut, cre]&quot;</code></pre>
-<p>This command says that both the author (aut) and the maintainer (cre) is Hadley Wickham, and that his email address is <code>hadley@rstudio.com</code>. The <code>person()</code> function has four main arguments:</p>
-<ul>
-<li><p>The name, specified by the first two arguments, <code>given</code> and <code>family</code> (these
-are normally supplied by position, not name). In English cultures, <code>given</code>
-(first name) comes before <code>family</code> (last name). In many cultures, this
-convention does not hold.</p></li>
-<li><p>The <code>email</code> address.</p></li>
-<li><p>A three letter code specifying the <code>role</code>. There are four important roles:</p>
-<ul>
-<li><p><code>cre</code>: the creator or maintainer, the person you should bother
-if you have problems.</p></li>
-<li><p><code>aut</code>: authors, those who have made significant contributions to the
-package.</p></li>
-<li><p><code>ctb</code>: contributors, those who have made smaller contributions, like
-patches.</p></li>
-<li><p><code>cph</code>: copyright holder. This is used if the copyright is held by someone
-other than the author, typically a company (i.e. the author’s employer).</p></li>
-</ul>
-<p>(The <a href="http://www.loc.gov/marc/relators/relaterm.html">full list of roles</a> is
-extremely comprehensive. Should your package have a woodcutter (“wdc”),
-lyricist (“lyr”) or costume designer (“cst”), rest comfortably that you can
-correctly describe their role in creating your package.)</p></li>
-</ul>
-<p>If you need to add further clarification, you can also use the <code>comment</code> argument and supply the desired information in plain text.</p>
-<p>You can list multiple authors with <code>c()</code>:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Authors@R:</span><span class="at"> c(</span>
-    person(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Wickham&quot;</span>, email = <span class="st">&quot;hadley@rstudio.com&quot;</span>, role = <span class="st">&quot;cre&quot;</span>),
-    person(<span class="st">&quot;Winston&quot;</span>, <span class="st">&quot;Chang&quot;</span>, email = <span class="st">&quot;winston@rstudio.com&quot;</span>, role = <span class="st">&quot;aut&quot;</span>))</code></pre>
-<p>Alternatively, you can do this concisely by using <code>as.person()</code>:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Authors@R:</span><span class="at"> as.person(c(</span>
-    <span class="st">&quot;Hadley Wickham &lt;hadley@rstudio.com&gt; [aut, cre]&quot;</span>, 
-    <span class="st">&quot;Winston Chang &lt;winston@rstudio.com&gt; [aut]&quot;</span>
-  ))</code></pre>
-<p>(This only works well for names with only one first and last name.)</p>
-<p>Every package must have at least one author (aut) and one maintainer (cre) (they might be the same person). The creator must have an email address. These fields are used to generate the basic citation for the package (e.g. <code>citation(&quot;pkgname&quot;)</code>). Only people listed as authors will be included in the auto-generated citation. There are a few extra details if you’re including code that other people have written. Since this typically occurs when you’re wrapping a C library, it’s discussed in <a href="src.html#src">compiled code</a>.</p>
-<p>As well as your email address, it’s also a good idea to list other resources available for help. You can list URLs in <code>URL</code>. Multiple URLs are separated with a comma. <code>BugReports</code> is the URL where bug reports should be submitted. For example, knitr has:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">URL:</span><span class="at"> http://yihui.name/knitr/</span>
-<span class="fu">BugReports:</span><span class="at"> https://github.com/yihui/knitr/issues</span></code></pre>
-<p>You can also use separate <code>Maintainer</code> and <code>Author</code> fields. I prefer not to use these fields because <code>Authors@R</code> offers richer metadata.</p>
-<div id="on-cran" class="section level3">
-<h3><span class="header-section-number">4.3.1</span> On CRAN</h3>
-<p>The most important thing to note is that your email address (i.e., the address of <code>cre</code>) is the address that CRAN will use to contact you about your package. So make sure you use an email address that’s likely to be around for a while. Also, because this address will be used for automated mailings, CRAN policies require that this be for a single person (not a mailing list) and that it does not require any confirmation or use any filtering.</p>
-</div>
-</div>
-<div id="license" class="section level2">
-<h2><span class="header-section-number">4.4</span> License: Who can use your package?</h2>
-<p>The <code>License</code> field can be either a standard abbreviation for an open source license, like <code>GPL-2</code> or <code>BSD</code>, or a pointer to a file containing more information, <code>file LICENSE</code>. The license is really only important if you’re planning on releasing your package. If you don’t, you can ignore this section. If you want to make it clear that your package is not open source, use <code>License: file LICENSE</code> and then create a file called <code>LICENSE</code>, containing for example:</p>
-<pre><code>Proprietary 
+<div id="release-check" class="section level2">
+<h2><span class="header-section-number">15.3</span> The submission process</h2>
+<p>To manually submit your package to CRAN, you create a package bundle (with <code>devtools::build()</code>) then upload it to <a href="http://cran.r-project.org/submit.html" class="uri">http://cran.r-project.org/submit.html</a>, along with some comments which describe the process you followed. This section shows you how to make submission as easy as possible by providing a standard structure for those comments. Later, in <a href="release.html#release-submission">submission</a>, you’ll see how to actually submit the package with <code>devtools::release()</code>.</p>
+<p>When submitting to CRAN, remember that CRAN is staffed by volunteers, all of whom have other full-time jobs. A typical week has over 100 submissions and only three volunteers to process them all. The less work you make for them the more likely you are to have a pleasant submission experience.</p>
+<p>I recommend that you store your submission comments in a file called <code>cran-comments.md</code>. <code>cran-comments.md</code> should be checked into git (so you can track it over time), and listed in <code>.Rbuildignore</code> (so it’s not included in the package). As the extension suggests, I recommend using Markdown because it gives a standard way of laying out plain text. However, because the contents will never be rendered to another format, you don’t need to worry about sticking to it too closely. Here are the <code>cran-comments.md</code> from a recent version of httr:</p>
+<pre class="sourceCode md"><code class="sourceCode markdown"><span class="fu">## Test environments</span>
+* <span class="fl">local OS X install, R 3.1.2</span>
+<span class="fl">* ubuntu 12.04 (on travis-ci), R 3.1.2</span>
+<span class="fl">* win-builder (devel and release)</span>
 
-Do not distribute outside of Widgets Incorporated.</code></pre>
-<p>Open source software licensing is a rich and complex field. Fortunately, in my opinion, there are only three licenses that you should consider for your R package:</p>
-<ul>
-<li><p><a href="https://tldrlegal.com/license/mit-license">MIT</a>
-(v. similar: to BSD 2 and 3 clause licenses). This is a simple and
-permissive license. It lets people use and freely distribute your code
-subject to only one restriction: the license must always be distributed
-with the code.</p>
-<p>The MIT license is a “template”, so if you use it, you need
-<code>License: MIT + file LICENSE</code>, and a <code>LICENSE</code> file that looks like this:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">YEAR:</span><span class="at"> &lt;Year or years when changes have been made&gt;</span>
-<span class="fu">COPYRIGHT HOLDER:</span><span class="at"> &lt;Name of the copyright holder&gt;</span></code></pre></li>
-<li><p><a href="https://tldrlegal.com/license/gnu-general-public-license-v2">GPL-2</a> or
-<a href="https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)">GPL-3</a>.
-These are “copy-left” licenses. This means that anyone who distributes your
-code in a bundle must license the whole bundle in a GPL-compatible way.
-Additionally, anyone who distributes modified versions of your code
-(derivative works) must also make the source code available. GPL-3 is a
-little stricter than GPL-2, closing some older loopholes.</p></li>
-<li><p><a href="https://tldrlegal.com/license/creative-commons-cc0-1.0-universal">CC0</a>.
-It relinquishes all your rights on the code and data so that it can be
-freely used by anyone for any purpose. This is sometimes called putting it
-in the public domain, a term which is neither well-defined nor meaningful in
-all countries.</p>
-<p>This license is most appropriate for data packages. Data, at least in the US,
-is not copyrightable, so you’re not really giving up much. This
-license just makes this point clear.</p></li>
-</ul>
-<p>If you’d like to learn more about other common licenses, Github’s <a href="http://choosealicense.com/licenses/">choosealicense.com</a> is a good place to start. Another good resource is <a href="https://tldrlegal.com/" class="uri">https://tldrlegal.com/</a>, which explains the most important parts of each license. If you use a license other than the three I suggest, make sure you consult the “Writing R Extensions” section on <a href="http://cran.r-project.org/doc/manuals/R-exts.html#The-DESCRIPTION-file">licensing</a>.</p>
-<p>If your package includes code that you didn’t write, you need to make sure you’re in compliance with its license. Since this occurs most commonly when you’re including C source code, it’s discussed in more detail in <a href="src.html#src">compiled code</a>.</p>
-<div id="on-cran-1" class="section level3">
-<h3><span class="header-section-number">4.4.1</span> On CRAN</h3>
-<p>If you want to release your package to CRAN, you must pick a standard license. Otherwise it’s difficult for CRAN to determine whether or not it’s legal to distribute your package! You can find a complete list of licenses that CRAN considers valid at <a href="https://svn.r-project.org/R/trunk/share/licenses/license.db" class="uri">https://svn.r-project.org/R/trunk/share/licenses/license.db</a>.</p>
-</div>
-</div>
-<div id="version" class="section level2">
-<h2><span class="header-section-number">4.5</span> Version</h2>
-<p>Formally, an R package version is a sequence of at least two integers separated by either <code>.</code> or <code>-</code>. For example, <code>1.0</code> and <code>0.9.1-10</code> are valid versions, but <code>1</code> or <code>1.0-devel</code> are not. You can parse a version number with <code>numeric_version</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">numeric_version</span>(<span class="st">&quot;1.9&quot;</span>) <span class="op">==</span><span class="st"> </span><span class="kw">numeric_version</span>(<span class="st">&quot;1.9.0&quot;</span>)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">numeric_version</span>(<span class="st">&quot;1.9.0&quot;</span>) <span class="op">&lt;</span><span class="st"> </span><span class="kw">numeric_version</span>(<span class="st">&quot;1.10.0&quot;</span>)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<p>For example, a package might have a version 1.9. This version number is considered by R to be the same as 1.9.0, less than version 1.9.2, and all of these are less than version 1.10 (which is version “one point ten”, not &quot;one point one zero). R uses version numbers to determine whether package dependencies are satisfied. A package might, for example, import package <code>devtools (&gt;= 1.9.2)</code>, in which case version 1.9 or 1.9.0 wouldn’t work.</p>
-<p>The version number of your package increases with subsequent releases of a package, but it’s more than just an incrementing counter – the way the number changes with each release can convey information about what kind of changes are in the package.</p>
-<p>I don’t recommend taking full advantage of R’s flexibility. Instead always use <code>.</code> to separate version numbers.</p>
-<ul>
-<li><p>A released version number consists of three numbers, <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code>.
-For version number 1.9.2, 1 is the major number, 9 is the minor number, and
-2 is the patch number. Never use versions like <code>1.0</code>, instead always spell
-out the three components, <code>1.0.0.</code></p></li>
-<li><p>An in-development package has a fourth component: the development version.
-This should start at 9000. For example, the first version of the package
-should be <code>0.0.0.9000</code>. There are two reasons for this recommendation:
-first, it makes it easy to see if a package is released or in-development,
-and the use of the fourth place means that you’re not limited to what the
-next version will be. <code>0.0.1</code>, <code>0.1.0</code> and <code>1.0.0</code> are all greater than
-<code>0.0.0.9000</code>.</p>
-<p>Increment the development version, e.g. from <code>9000</code> to <code>9001</code> if you’ve
-added an important feature that another development package needs to depend
-on.</p>
-<p>If you’re using svn, instead of using the arbitrary <code>9000</code>, you can
-embed the sequential revision identifier.</p></li>
-</ul>
-<p>This advice here is inspired in part by <a href="http://semver.org">Semantic Versioning</a> and by the <a href="http://www.x.org/releases/X11R7.7/doc/xorg-docs/Versions.html">X.Org</a> versioning schemes. Read them if you’d like to understand more about the standards of versioning used by many open source projects.</p>
-<p>We’ll come back to version numbers in the context of releasing your package, <a href="release.html#release-version">picking a version number</a>. For now, just remember that the first version of your package should be <code>0.0.0.9000</code>.</p>
-</div>
-<div id="description-misc" class="section level2">
-<h2><span class="header-section-number">4.6</span> Other components</h2>
-<p>A number of other fields are described elsewhere in the book:</p>
-<ul>
-<li><p><code>Collate</code> controls the order in which R files are sourced. This only
-matters if your code has side-effects; most commonly because you’re
-using S4. This is described in more depth in <a href="man.html#man-s4">documenting S4</a>.</p></li>
-<li><p><code>LazyData</code> makes it easier to access data in your package. Because it’s so
-important, it’s included in the minimal description created by devtools. It’s
-described in more detail in <a href="data.html#data">external data</a>.</p></li>
-</ul>
-<p>There are actually many other rarely, if ever, used fields. A complete list can be found in the “The DESCRIPTION file” section of the <a href="http://cran.r-project.org/doc/manuals/R-exts.html#The-DESCRIPTION-file">R extensions manual</a>. You can also create your own fields to add additional metadata. The only restrictions are that you shouldn’t use existing names and that, if you plan to submit to CRAN, the names you use should be valid English words (so a spell-checking NOTE won’t be generated).</p>
+<span class="fu">## R CMD check results</span>
+There were no ERRORs or WARNINGs. 
 
+There was 1 NOTE:
+
+* <span class="fl">checking dependencies in R code ... NOTE</span>
+<span class="fl">  Namespace in Imports field not imported from: &#39;R6&#39;</span>
+
+  R6 is a build-time dependency.
+
+<span class="fu">## Downstream dependencies</span>
+I have also run R CMD check on downstream dependencies of httr 
+(https://github.com/wch/checkresults/blob/master/httr/r-release). 
+All packages that I could install passed except:
+
+* <span class="fl">Ecoengine: this appears to be a failure related to config on </span>
+<span class="fl">  that machine. I couldn&#39;t reproduce it locally, and it doesn&#39;t </span>
+<span class="fl">  seem to be related to changes in httr (the same problem exists </span>
+<span class="fl">  with httr 0.4).</span></code></pre>
+<p>This layout is designed to be easy to skim, and easy to match up to the <code>R CMD check</code> results seen by CRAN maintainers. It includes three sections:</p>
+<ol style="list-style-type: decimal">
+<li><p>Test environments: this describes where I checked the package. I always
+check on three platforms: my mac, <a href="check.html#travis">travis-ci</a> and win-builder.</p></li>
+<li><p>Check results: I always state that there were no errors or warnings.
+Any <code>NOTE</code>s go in a bulleted list. For each <code>NOTE</code>, I include the message
+from <code>R CMD check</code> and a brief description of why I think it’s OK.
+If there were no <code>NOTE</code>s, I’d say “There were no ERRORs, WARNINGs or NOTEs”</p></li>
+<li><p>Downstream dependencies: If there are downstream dependencies, I run
+<code>R CMD check</code> on each package and summarise the results. If there are
+no downstream dependencies, keep this section, but say: “There are currently
+no downstream dependencies for this package”.</p></li>
+</ol>
+<p>These are described in more detail below.</p>
+<div id="release-test-env" class="section level3">
+<h3><span class="header-section-number">15.3.1</span> Test environments</h3>
+<p>When checking your package you need to make sure that it passed with the current development version of R and it works on at least two platforms. <code>R CMD check</code> is continuously evolving, so it’s a good idea to check your package with the latest development version, <strong>R-devel</strong>. You can install R-devel on your own machine:</p>
+<ul>
+<li><p>Mac: install from <a href="http://r.research.att.com" class="uri">http://r.research.att.com</a>.</p></li>
+<li><p>Windows: install from <a href="http://cran.r-project.org/bin/windows/base/rdevel.html" class="uri">http://cran.r-project.org/bin/windows/base/rdevel.html</a></p></li>
+<li><p>Linux: either build it from source, or better, learn about Docker containers
+and run the R-devel container from <a href="https://github.com/rocker-org/rocker" class="uri">https://github.com/rocker-org/rocker</a>.</p></li>
+</ul>
+<p>It’s painful to manage multiple R versions, especially since you’ll need to reinstall all your packages. Instead, you can run <code>R CMD check</code> on CRAN’s servers with <code>devtools::build_win()</code>. This builds your package and submits it to the CRAN win-builder. 10-20 minutes after submission, you’ll receive an e-mail telling you the check results.</p>
+<p>CRAN runs on multiple platforms: Windows, Mac OS X, Linux and Solaris. You don’t need to run <code>R CMD check</code> on every one of these platforms, but it’s a really good idea to do it on at least two. This increases your chances of spotting code that relies on the idiosyncrasies of specific platform. If you’re on Linux or Mac, use <code>devtools::build_win()</code> to check on Windows. If you’re on Windows, use Travis, as described in <a href="check.html#travis">continuous integration with Travis</a>, to run checks on Linux.</p>
+<p>Debugging code that works on your computer but fails elsewhere is painful. If that happens to you, either install a virtualisation tool so that you can run another operating system locally, or find a friend to help you figure out the problem. Don’t submit the package and hope CRAN will help you figure out the problem.</p>
+</div>
+<div id="release-check" class="section level3">
+<h3><span class="header-section-number">15.3.2</span> Check results</h3>
+<p>You’ve already learned how to use <code>R CMD check</code> and why it’s important in <a href="check.html#check">automated checking</a>. Compared to running <code>R CMD check</code> locally, there are a few important differences when running it for a CRAN submission:</p>
+<ul>
+<li><p>You must fix all <code>ERROR</code>s and <code>WARNING</code>s. A package that contains any errors
+or warnings will not be accepted by CRAN.</p></li>
+<li><p>Eliminate as many <code>NOTE</code>s as possible. Each <code>NOTE</code> requires human oversight,
+which is a precious commodity. If there are notes that you do
+not believe are important, it is almost always easier to fix them (even if
+the fix is a bit of a hack) than to persuade CRAN that they’re OK. See
+<a href="check.html#check-checks">check descriptions</a> for details on how to fix individual
+problems.</p>
+<p>If you have no <code>NOTE</code>s it is less likely that your package will be
+flagged for additional human checks. These are time consuming for both
+you and CRAN, so are best avoided if possible.</p></li>
+<li><p>If you can’t eliminate a <code>NOTE</code>, document it in <code>cran-comments.md</code>,
+describing why you think it is spurious. Your comments should be easy to
+scan, and easy to match up with <code>R CMD check</code>. Provide the CRAN maintainers
+with everything they need in one place, even if it means repeating yourself.</p>
+<p>NB: There will always be one <code>NOTE</code> when you first submit your package.
+This reminds CRAN that this is a new submission and that they’ll need to
+do some extra checks. You can’t eliminate this, so just mention in
+<code>cran-comments.md</code> that this is your first submission.</p></li>
+</ul>
+</div>
+<div id="release-deps" class="section level3">
+<h3><span class="header-section-number">15.3.3</span> Reverse dependencies</h3>
+<p>Finally, if you’re releasing a new version of an existing package, it’s your responsibility to check that downstream dependencies (i.e. all packages that list your package in the <code>Depends</code>, <code>Imports</code>, <code>Suggests</code> or <code>LinkingTo</code> fields) continue to work. To help you do this, devtools provides <code>devtools::revdep_check()</code>. This:</p>
+<ol style="list-style-type: decimal">
+<li><p>Sets up a temporary library so it doesn’t clobber any existing packages you
+have installed.</p></li>
+<li><p>Installs all of the dependencies of the downstream dependencies.</p></li>
+<li><p>Runs <code>R CMD check</code> on each package.</p></li>
+<li><p>Summarises the results in a single file.</p></li>
+</ol>
+<p>Run <code>use_revdep()</code> to set up your package with a useful template.</p>
+<p>If any packages fail <code>R CMD check</code>, you should give package authors at least two weeks to fix the problem before you submit your package to CRAN (you can easily get all maintainer e-mail addresses with <code>revdep_maintainers()</code>). After the two weeks is up, re-run the checks, and list any remaining failures in <code>cran-comments.md</code>. Each package should be accompanied by a brief explanation that either tells CRAN that it’s a false positive in <code>R CMD check</code> (e.g. you couldn’t install a dependency locally) or that it’s a legitimate change in the API (which the maintainer hasn’t fixed yet).</p>
+<p>Inform CRAN of your release process: “I advised all downstream package maintainers of these problems two weeks ago”. Here’s an example from a recent release of dplyr:</p>
+<pre><code>Important reverse dependency check notes (full details at 
+https://github.com/wch/checkresults/tree/master/dplyr/r-release);
+
+* COPASutils, freqweights, qdap, simPH: fail for various reasons. All package 
+  authors were informed of the upcoming release and shown R CMD check issues 
+  over two weeks ago.
+
+* ggvis: You&#39;ll be receiving a submission that fixes these issues very shortly
+  from Winston.
+
+* repra, rPref: uses a deprecated function.</code></pre>
+</div>
+</div>
+<div id="cran-policies" class="section level2">
+<h2><span class="header-section-number">15.4</span> CRAN policies</h2>
+<p>As well as the automated checks provided by <code>R CMD check</code>, there are a number of <a href="http://cran.r-project.org/web/packages/policies.html">CRAN policies</a> that must be checked manually. The CRAN maintainers will typically look at this very closely on a package’s first submission.</p>
+<p>I’ve summarised the most common problems below:</p>
+<ul>
+<li><p>It’s vital that the maintainer’s e-mail address is stable because this is the
+only way that CRAN has to contact you, and if there are problems and they
+can’t get in touch with you they will remove your package from CRAN. So make
+sure it’s something that’s likely to be around for a while, and that it’s not
+heavily filtered.</p></li>
+<li><p>You must have clearly identified the copyright holders in <code>DESCRIPTION</code>:
+if you have included external source code, you must ensure that the license
+is compatible. See <a href="description.html#license">license</a> and <a href="src.html#src-licensing"><code>src/</code> licensing</a>
+for more details.</p></li>
+<li><p>You must “make all reasonable efforts” to get your package working across
+multiple platforms. Packages that don’t work on at least two will
+not normally be considered.</p></li>
+<li><p>Do not make external changes without explicit user permission. Don’t write to
+the file system, change options, install packages, quit R, send information
+over the internet, open external software, etc.</p></li>
+<li><p>Do not submit updates too frequently. The policy suggests a new version
+once every 1-2 months at most.</p></li>
+</ul>
+<p>I recommend following the <a href="https://twitter.com/CRANPolicyWatch">CRAN Policy Watch</a> Twitter account which tweets whenever there’s a policy change. You can also look at the GitHub repository that powers it: <a href="https://github.com/eddelbuettel/crp/commits/master/texi" class="uri">https://github.com/eddelbuettel/crp/commits/master/texi</a>.</p>
+</div>
+<div id="important-files" class="section level2">
+<h2><span class="header-section-number">15.5</span> Important files</h2>
+<p>You now have a package that’s ready to submit to CRAN. But before you do, there are two important files that you should update: <code>README.md</code> which describes what the package does, and <code>NEWS.md</code> which describes what’s changed since the previous version. I recommend using Markdown for these files, because it’s useful for them to be readable as both plain text (e.g. in emails) and HTML (e.g. on GitHub, in blog posts). The basic writing and formatting syntax is available at <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/" class="uri">https://help.github.com/articles/basic-writing-and-formatting-syntax/</a>.</p>
+<div id="readme" class="section level3">
+<h3><span class="header-section-number">15.5.1</span> README.md</h3>
+<p>The goal of the <code>README.md</code> is to answer the following questions about your package:</p>
+<ul>
+<li>Why should I use it?</li>
+<li>How do I use it?</li>
+<li>How do I get it?</li>
+</ul>
+<p>On GitHub, the <code>README.md</code> will be rendered as HTML and displayed on the repository home page.</p>
+<p>I normally structure my <code>README</code> as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>A paragraph that describes the high-level purpose of the package.</p></li>
+<li><p>An example that shows how to use the package to solve a simple problem.</p></li>
+<li><p>Installation instructions, giving code that can be copied and pasted into R.</p></li>
+<li><p>An overview that describes the main components of the package. For more
+complex packages, this will point to vignettes for more details.</p></li>
+</ol>
+</div>
+<div id="readme-rmd" class="section level3">
+<h3><span class="header-section-number">15.5.2</span> README.Rmd</h3>
+<p>If you include an example in your <code>README</code> (a good idea!) you may want to generate it with R Markdown. The easiest way to get started is to use <code>devtools::use_readme_rmd()</code>. This creates a template <code>README.Rmd</code> and adds it to <code>.Rbuildignore</code>. The template looks like:</p>
+<pre><code>---
+output: github_document
+---
+
+&lt;!-- README.md is generated from README.Rmd. Please edit that file --&gt;
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = &quot;#&gt;&quot;,
+  fig.path = &quot;README-&quot;
+)
+```</code></pre>
+<p>This:</p>
+<ul>
+<li><p>Outputs Github flavoured Markdown.</p></li>
+<li><p>Includes a comment in <code>README.md</code> to remind you to edit <code>README.Rmd</code>, not
+<code>README.md</code>.</p></li>
+<li><p>Sets up my recommended knitr options, including saving an image to
+<code>README-chunkname.png</code> (which is automatically <code>.Rbuildignore</code>d.)</p></li>
+</ul>
+<p>You’ll need to remember to re-knit <code>README.Rmd</code> each time you modify it. If you use git, <code>use_readme_rmd()</code> automatically adds the following “pre-commit” hook:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
+<span class="kw">if [[</span> README.Rmd <span class="ot">-nt</span> README.md<span class="kw"> ]]</span>; <span class="kw">then</span>
+  <span class="bu">echo</span> <span class="st">&quot;README.md is out of date; please re-knit README.Rmd&quot;</span>
+  <span class="bu">exit</span> 1
+<span class="kw">fi</span> </code></pre>
+<p>This prevents <code>git commit</code> from succeeding unless <code>README.md</code> is more recent than <code>README.Rmd</code>. If you get a false positive, you can ignore the check with <code>git commit --no-verify</code>. Note that git commit hooks are not stored in the repository, so every time you clone the repo, you’ll need to run <code>devtools::use_readme_rmd()</code> to set it up again.</p>
+</div>
+<div id="news" class="section level3">
+<h3><span class="header-section-number">15.5.3</span> NEWS.md</h3>
+<p>The <code>README.md</code> is aimed at new users. The <code>NEWS.md</code> is aimed at existing users: it should list all the API changes in each release. There are a number of formats you can use for package news, but I recommend <code>NEWS.md</code>. It’s well supported by GitHub, permitted by CRAN, and is easy to re-purpose for other formats.</p>
+<p>Organise your <code>NEWS.md</code> as follows:</p>
+<ul>
+<li><p>Use a top-level heading for each version: e.g. <code># mypackage 1.0</code>. The most
+recent version should go at the top.</p></li>
+<li><p>Each change should be included in a bulleted list. If you have a lot of
+changes you might want to break them up using subheadings, <code>## Major changes</code>,
+<code>## Bug fixes</code> etc. I usually stick with a simple list until just before
+releasing the package when I’ll reorganise into sections, if needed.
+It’s hard to know in advance exactly what sections you’ll need.</p></li>
+<li><p>If an item is related to an issue in GitHub, include the issue number in
+parentheses, e.g. <code>(#10)</code>. If an item is related to a pull request, include
+the pull request number and the author, e.g. <code>(#101, @hadley)</code>. Doing
+this makes it easy to navigate to the relevant issues on GitHub.</p></li>
+</ul>
+<p>The main challenge with <code>NEWS.md</code> is getting into the habit of noting a change as you make a change.</p>
+</div>
+</div>
+<div id="release-submission" class="section level2">
+<h2><span class="header-section-number">15.6</span> Release</h2>
+<p>You’re now ready to submit your package to CRAN. The easiest way to do this is to run <code>devtools::release()</code>. This:</p>
+<ul>
+<li><p>Builds the package and runs <code>R CMD check</code> one last time.</p></li>
+<li><p>Asks you a number of yes/no questions to verify that you followed the
+most common best practices.</p></li>
+<li><p>Allows you to add your own questions to the check process by including an
+unexported <code>release_questions()</code> function in your package. This should
+return a character vector of questions to ask. For example, httr has:</p>
+<pre class="sourceCode r"><code class="sourceCode r">release_questions &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="kw">c</span>(
+    <span class="st">&quot;Have you run all the OAuth demos?&quot;</span>,
+    <span class="st">&quot;Is inst/cacert.pem up to date?&quot;</span>
+  )
+}</code></pre>
+<p>This is useful for reminding you to do any manual tasks that
+can’t otherwise be automated.</p></li>
+<li><p>Uploads the package bundle to the
+<a href="http://cran.r-project.org/submit.html">CRAN submission form</a> including the
+comments in <code>cran-comments.md</code>.</p></li>
+</ul>
+<p>Within the next few minutes, you’ll receive an email notifying you of the submission and asking you to approve it (this confirms that the maintainer address is correct). Next the CRAN maintainers will run their checks and get back to you with the results. This normally takes around 24 hours, but occasionally can take up to 5 days.</p>
+<div id="on-failure" class="section level3">
+<h3><span class="header-section-number">15.6.1</span> On failure</h3>
+<p>If your package does not pass <code>R CMD check</code> or is in violation of CRAN policies, a CRAN maintainer will e-mail you and describe the problem(s). Failures are frustrating, and the feedback may be curt and may feel downright insulting. Arguing with CRAN maintainers will likely waste both your time and theirs. Instead:</p>
+<ul>
+<li><p>Breathe. A rejected CRAN package is not the end of the world. It happens to
+everyone. Even members of R-core have to go through the same process and CRAN
+is no friendlier to them. I have had numerous packages rejected by CRAN.
+I was banned from submitting to CRAN for two weeks because too many of
+my existing packages had minor problems.</p></li>
+<li><p>If the response gets you really riled up, take a couple of days to cool down
+before responding. Ignore any ad hominem attacks, and strive to respond only
+to technical issues.</p></li>
+<li><p>If a devtools problem causes a CRAN maintainer to be annoyed with you, I
+am deeply sorry. If you forward me the message along with your address,
+I’ll send you a hand-written apology card.</p></li>
+</ul>
+<p>Unless you feel extremely strongly that discussion is merited, don’t respond to the e-mail. Instead:</p>
+<ul>
+<li><p>Fix the identified problems and make recommended changes. Re-run
+<code>devtools::check()</code> to make sure you didn’t accidentally introduce any
+new problems.</p></li>
+<li><p>Add a “Resubmission” section at the top of <code>cran-comments.md</code>. This should
+clearly identify that the package is a resubmission, and list the changes
+that you made.</p>
+<pre class="sourceCode md"><code class="sourceCode markdown"><span class="fu">## Resubmission</span>
+This is a resubmission. In this version I have:
+
+* <span class="fl">Converted the DESCRIPTION title to title case.</span>
+
+* <span class="fl">More clearly identified the copyright holders in the DESCRIPTION</span>
+<span class="fl">  and LICENSE files.</span></code></pre></li>
+<li><p>If necessary, update the check results and downstream dependencies sections.</p></li>
+<li><p>Run <code>devtools::submit_cran()</code> to re-submit the package without working
+through all the <code>release()</code> questions a second time.</p></li>
+</ul>
+</div>
+<div id="binary-builds" class="section level3">
+<h3><span class="header-section-number">15.6.2</span> Binary builds</h3>
+<p>After the package has been accepted by CRAN it will be built for each platform. It’s possible this may uncover further errors. Wait 48 hours until all the checks for all packages have been run, then go to the check results page for your package:</p>
+<p><img src="images/cran-checks.png" /><!-- --></p>
+<p>Prepare a patch release that fixes the problems and submit using the same process as above.</p>
+</div>
+</div>
+<div id="post-release" class="section level2">
+<h2><span class="header-section-number">15.7</span> Prepare for next version</h2>
+<p>Once your package has been accepted by CRAN, you have a couple of technical tasks to do:</p>
+<ul>
+<li><p>If you use GitHub, go to the repository release page. Create a new release
+with tag version <code>v1.2.3</code> (i.e. “v” followed by the version of your package).
+Copy and paste the contents of the relevant <code>NEWS.md</code> section into the release
+notes.</p></li>
+<li><p>If you use git, but not GitHub, tag the release with <code>git tag -a v1.2.3</code>.</p></li>
+<li><p>Add the <code>.9000</code> suffix to the <code>Version</code> field in the DESCRIPTION to indicate
+that this is a development version. Create a new heading in <code>NEWS.md</code> and commit the changes.</p></li>
+</ul>
+</div>
+<div id="promotion" class="section level2">
+<h2><span class="header-section-number">15.8</span> Publicising your package</h2>
+<p>Now you’re ready for the fun part: publicising your package. This is really important. No one will use your helpful new package if they don’t know that it exists.</p>
+<p>Start by writing a release announcement. This should be an R Markdown document that briefly describes what the package does (so people who haven’t used it before can understand why they should care), and what’s new in this version. Start with the contents of <code>NEWS.md</code>, but you’ll need to modify it. The goal of <code>NEWS.md</code> is to be comprehensive; the goal of the release announcement is to highlight the most important changes. Include a link at the end of the announcement to the full release notes so people can see all the changes. Where possible, I recommend showing examples of new features: it’s much easier to understand the benefit of a new feature if you can see it in action.</p>
+<p>There are a number of places you can include the announcement:</p>
+<ul>
+<li><p>If you have a blog, publish it there. I now publish all package release
+announcements on the <a href="http://blog.rstudio.org/author/hadleywickham/">RStudio blog</a>.</p></li>
+<li><p>If you use Twitter, tweet about it with the #rstats hashtag.</p></li>
+<li><p>Send it to the
+<a href="https://stat.ethz.ch/mailman/listinfo/r-packages">r-packages mailing list</a>.
+Messages sent to this list are automatically forwarded to the R-help mailing
+list.</p></li>
+</ul>
 </div>
 </div>
             </section>
@@ -676,8 +819,8 @@ described in more detail in <a href="data.html#data">external data</a>.</p></li>
           </div>
         </div>
       </div>
-<a href="r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="man.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="check.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="congratulations.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

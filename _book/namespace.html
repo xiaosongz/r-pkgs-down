@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 4 Package metadata | R packages</title>
+  <title>Chapter 8 Namespace | R packages</title>
   <meta name="description" content="This is the book site for “R packages”.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 4 Package metadata | R packages" />
+  <meta property="og:title" content="Chapter 8 Namespace | R packages" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Package metadata | R packages" />
+  <meta name="twitter:title" content="Chapter 8 Namespace | R packages" />
   
   <meta name="twitter:description" content="This is the book site for “R packages”." />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="r.html">
-<link rel="next" href="man.html">
+<link rel="prev" href="tests.html">
+<link rel="next" href="data.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -389,286 +389,283 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="description" class="section level1">
-<h1><span class="header-section-number">Chapter 4</span> Package metadata</h1>
-<p>The job of the <code>DESCRIPTION</code> file is to store important metadata about your package. When you first start writing packages, you’ll mostly use these metadata to record what packages are needed to run your package. However, as time goes by and you start sharing your package with others, the metadata file becomes increasingly important because it specifies who can use it (the license) and whom to contact (you!) if there are any problems.</p>
-<p>Every package must have a <code>DESCRIPTION</code>. In fact, it’s the defining feature of a package (RStudio and devtools consider any directory containing <code>DESCRIPTION</code> to be a package). To get you started, <code>devtools::create(&quot;mypackage&quot;)</code> automatically adds a bare-bones description file. This will allow you to start writing the package without having to worry about the metadata until you need to. The minimal description will vary a bit depending on your settings, but should look something like this:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Package:</span><span class="at"> mypackage</span>
-<span class="fu">Title:</span><span class="at"> What The Package Does (one line, title case required)</span>
-<span class="fu">Version:</span><span class="at"> 0.1</span>
-<span class="fu">Authors@R:</span><span class="at"> person(&quot;First&quot;, &quot;Last&quot;, email = &quot;first.last@example.com&quot;,</span>
-                  role = c(<span class="st">&quot;aut&quot;</span>, <span class="st">&quot;cre&quot;</span>))
-<span class="fu">Description:</span><span class="at"> What the package does (one paragraph)</span>
-<span class="fu">Depends:</span><span class="at"> R (&gt;= 3.1.0)</span>
-<span class="fu">License:</span><span class="at"> What license is it under?</span>
-<span class="fu">LazyData:</span><span class="at"> true</span></code></pre>
-<p>(If you’re writing a lot of packages, you can set global options via <code>devtools.desc.author</code>, <code>devtools.desc.license</code>, <code>devtools.desc.suggests</code>, and <code>devtools.desc</code>. See <code>package?devtools</code> for more details.)</p>
-<p><code>DESCRIPTION</code> uses a simple file format called DCF, the Debian control format. You can see most of the structure in the simple example below. Each line consists of a <strong>field</strong> name and a value, separated by a colon. When values span multiple lines, they need to be indented:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Description:</span><span class="at"> The description of a package is usually long,</span>
-    spanning multiple lines. The second and subsequent lines
-    should be indented, usually with four spaces.</code></pre>
-<p>This chapter will show you how to use the most important <code>DESCRIPTION</code> fields.</p>
-<div id="dependencies" class="section level2">
-<h2><span class="header-section-number">4.1</span> Dependencies: What does your package need?</h2>
-<p>It’s the job of the <code>DESCRIPTION</code> to list the packages that your package needs to work. R has a rich set of ways of describing potential dependencies. For example, the following lines indicate that your package needs both ggvis and dplyr to work:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Imports:</span>
-    dplyr,
-    ggvis</code></pre>
-<p>Whereas, the lines below indicate that while your package can take advantage of ggvis and dplyr, they’re not required to make it work:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Suggests:</span>
-    dplyr,
-    ggvis</code></pre>
-<p>Both <code>Imports</code> and <code>Suggests</code> take a comma separated list of package names. I recommend putting one package on each line, and keeping them in alphabetical order. That makes it easy to skim.</p>
-<p><code>Imports</code> and <code>Suggests</code> differ in their strength of dependency:</p>
+<div id="namespace" class="section level1">
+<h1><span class="header-section-number">Chapter 8</span> Namespace</h1>
+<p>The package namespace (as recorded in the <code>NAMESPACE</code> file) is one of the more confusing parts of building a package. It’s a fairly advanced topic, and by-and-large, not that important if you’re only developing packages for yourself. However, understanding namespaces is vital if you plan to submit your package to CRAN. This is because CRAN requires that your package plays nicely with other packages.</p>
+<p>When you first start using namespaces, it’ll seem like a lot of work for little gain. However, having a high quality namespace helps encapsulate your package and makes it self-contained. This ensures that other packages won’t interfere with your code, that your code won’t interfere with other packages, and that your package works regardless of the environment in which it’s run.</p>
+<div id="namespace-motivation" class="section level2">
+<h2><span class="header-section-number">8.1</span> Motivation</h2>
+<p>As the name suggests, namespaces provide “spaces” for “names”. They provide a context for looking up the value of an object associated with a name.</p>
+<p>Without knowing it, you’ve probably already used namespaces. For example, have you ever used the <code>::</code> operator? It disambiguates functions with the same name. For example, both plyr and Hmisc provide a <code>summarize()</code> function. If you load plyr, then Hmisc, <code>summarize()</code> will refer to the Hmisc version. But if you load the packages in the opposite order, <code>summarize()</code> will refer to the plyr version. This can be confusing. Instead, you can explicitly refer to specific functions: <code>Hmisc::summarize()</code> and <code>plyr::summarize()</code>. Then the order in which the packages are loaded won’t matter.</p>
+<p>Namespaces make your packages self-contained in two ways: the <strong>imports</strong> and the <strong>exports</strong>. The <strong>imports</strong> defines how a function in one package finds a function in another. To illustrate, consider what happens when someone changes the definition of a function that you rely on: for example, the simple <code>nrow()</code> function in base R:</p>
+<pre class="sourceCode r"><code class="sourceCode r">nrow</code></pre>
+<pre><code>## function (x) 
+## dim(x)[1L]
+## &lt;bytecode: 0x7f9559207110&gt;
+## &lt;environment: namespace:base&gt;</code></pre>
+<p>It’s defined in terms of <code>dim()</code>. So what will happen if we override <code>dim()</code>
+with our own definition? Does <code>nrow()</code> break?</p>
+<pre class="sourceCode r"><code class="sourceCode r">dim &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)
+<span class="kw">dim</span>(mtcars)</code></pre>
+<pre><code>## [1] 1 1</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(mtcars)</code></pre>
+<pre><code>## [1] 32</code></pre>
+<p>Surprisingly, it does not! That’s because when <code>nrow()</code> looks for an object
+called <code>dim()</code>, it uses the package namespace, so it finds <code>dim()</code> in
+the base environment, not the <code>dim()</code> we created in the global environment.</p>
+<p>The <strong>exports</strong> helps you avoid conflicts with other packages by specifying which functions are available outside of your package (internal functions are available only within your package and can’t easily be used by another package). Generally, you want to export a minimal set of functions; the fewer you export, the smaller the chance of a conflict. While conflicts aren’t the end of the world because you can always use <code>::</code> to disambiguate, they’re best avoided where possible because it makes the lives of your users easier.</p>
+</div>
+<div id="search-path" class="section level2">
+<h2><span class="header-section-number">8.2</span> Search path</h2>
+<p>To understand why namespaces are important, you need a solid understanding of search paths. To call a function, R first has to find it. R does this by first looking in the global environment. If R doesn’t find it there, it looks in the search path, the list of all the packages you have <strong>attached</strong>. You can see this list by running <code>search()</code>. For example, here’s the search path for the code in this book:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">search</span>()</code></pre>
+<pre><code>##  [1] &quot;.GlobalEnv&quot;           &quot;package:nycflights13&quot; &quot;package:lubridate&quot;   
+##  [4] &quot;package:stringr&quot;      &quot;package:testthat&quot;     &quot;package:roxygen2&quot;    
+##  [7] &quot;package:shiny&quot;        &quot;tools:rstudio&quot;        &quot;package:stats&quot;       
+## [10] &quot;package:graphics&quot;     &quot;package:grDevices&quot;    &quot;package:utils&quot;       
+## [13] &quot;package:datasets&quot;     &quot;package:methods&quot;      &quot;Autoloads&quot;           
+## [16] &quot;package:base&quot;</code></pre>
+<p>There’s an important difference between loading and attaching a package. Normally when you talk about loading a package you think of <code>library()</code>, but that actually attaches the package.</p>
+<p>If a package is installed,</p>
 <ul>
-<li><p><code>Imports</code>: packages listed here <em>must</em> be present for your package to
-work. In fact, any time your package is installed, those packages will, if
-not already present, be installed on your computer (<code>devtools::load_all()</code>
-also checks that the packages are installed).</p>
-<p>Adding a package dependency here ensures that it’ll be installed. However,
-it does <em>not</em> mean that it will be attached along with your package (i.e.,
-<code>library(x)</code>). The best practice is to explicitly refer to external
-functions using the syntax <code>package::function()</code>. This makes it very easy to
-identify which functions live outside of your package. This is especially
-useful when you read your code in the future.</p>
-<p>If you use a lot of functions from other packages this is rather
-verbose. There’s also a minor performance penalty associated with <code>::</code>
-(on the order of 5µs, so it will only matter if you call the function
-millions of times). You’ll learn about alternative ways to call functions
-in other packages in <a href="namespace.html#imports">namespace imports</a>.</p></li>
-<li><p><code>Suggests</code>: your package can use these packages, but doesn’t require them.
-You might use suggested packages for example datasets, to run tests,
-build vignettes, or maybe there’s only one function that needs the package.</p>
-<p>Packages listed in <code>Suggests</code> are not automatically installed along with
-your package. This means that you need to check if the package is available
-before using it (use <code>requireNamespace(x, quietly = TRUE)</code>). There are
-two basic scenarios:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># You need the suggested package for this function    </span>
-my_fun &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) {
-  <span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">&quot;pkg&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)) {
-    <span class="kw">stop</span>(<span class="st">&quot;Package </span><span class="ch">\&quot;</span><span class="st">pkg</span><span class="ch">\&quot;</span><span class="st"> needed for this function to work. Please install it.&quot;</span>,
-      <span class="dt">call. =</span> <span class="ot">FALSE</span>)
-  }
-}
+<li><p><strong>Loading</strong> will load code, data and any DLLs; register S3 and
+S4 methods; and run the <code>.onLoad()</code> function. After loading, the
+package is available in memory, but because it’s not in the search
+path, you won’t be able to access its components without using <code>::</code>.
+Confusingly, <code>::</code> will also load a package automatically if it
+isn’t already loaded. It’s rare to load a package explicitly, but you
+can do so with <code>requireNamespace()</code> or <code>loadNamespace()</code>.</p></li>
+<li><p><strong>Attaching</strong> puts the package in the search path. You can’t attach a
+package without first loading it, so both <code>library()</code> or <code>require()</code> load
+then attach the package. You can see the currently attached packages with
+<code>search()</code>.</p></li>
+</ul>
+<p>If a package isn’t installed, loading (and hence attaching) will fail with an error.</p>
+<p>To see the differences more clearly, consider two ways of running <code>expect_that()</code> from the testthat package. If we use <code>library()</code>, testthat is attached to the search path. If we use <code>::</code>, it’s not.</p>
+<pre class="sourceCode r"><code class="sourceCode r">old &lt;-<span class="st"> </span><span class="kw">search</span>()
+testthat<span class="op">::</span><span class="kw">expect_equal</span>(<span class="dv">1</span>, <span class="dv">1</span>)
+<span class="kw">setdiff</span>(<span class="kw">search</span>(), old)</code></pre>
+<pre><code>## character(0)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">expect_true</span>(<span class="ot">TRUE</span>)
+    
+<span class="kw">library</span>(testthat)
+<span class="kw">expect_equal</span>(<span class="dv">1</span>, <span class="dv">1</span>)
+<span class="kw">setdiff</span>(<span class="kw">search</span>(), old)</code></pre>
+<pre><code>## character(0)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">expect_true</span>(<span class="ot">TRUE</span>)</code></pre>
+<p>There are four functions that make a package available. They differ based on whether they load or attach, and what happens if the package is not found (i.e., throws an error or returns FALSE).</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Throws error</th>
+<th>Returns <code>FALSE</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Load</td>
+<td><code>loadNamespace(&quot;x&quot;)</code></td>
+<td><code>requireNamespace(&quot;x&quot;, quietly = TRUE)</code></td>
+</tr>
+<tr class="even">
+<td>Attach</td>
+<td><code>library(x)</code></td>
+<td><code>require(x, quietly = TRUE)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Of the four, you should only ever use two:</p>
+<ul>
+<li><p>Use <code>library(x)</code> in data analysis scripts. It will throw an error if the
+package is not installed, and will terminate the script. You want to attach
+the package to save typing. Never use <code>library()</code> in a package.</p></li>
+<li><p>Use <code>requireNamespace(x, quietly = TRUE)</code> inside a package if you want a
+specific action (e.g. throw an error) depending on whether or not
+a suggested package is installed.</p></li>
+</ul>
+<p>You never need to use <code>require()</code> (<code>requireNamespace()</code> is almost always better), or <code>loadNamespace()</code> (which is only needed for internal R code). You should never use <code>require()</code> or <code>library()</code> in a package: instead, use the <code>Depends</code> or <code>Imports</code> fields in the <code>DESCRIPTION</code>.</p>
+<p>Now’s a good time to come back to an important issue which we glossed over earlier. What’s the difference between <code>Depends</code> and <code>Imports</code> in the <code>DESCRIPTION</code>? When should you use one or the other?</p>
+<p>Listing a package in either <code>Depends</code> or <code>Imports</code> ensures that it’s installed when needed. The main difference is that where <code>Imports</code> just <em>loads</em> the package, <code>Depends</code> <em>attaches</em> it. There are no other differences. The rest of the advice in this chapter applies whether or not the package is in <code>Depends</code> or <code>Imports</code>.</p>
+<p>Unless there is a good reason otherwise, you should always list packages in <code>Imports</code> not <code>Depends</code>. That’s because a good package is self-contained, and minimises changes to the global environment (including the search path). The only exception is if your package is designed to be used in conjunction with another package. For example, the <a href="https://github.com/gavinsimpson/analogue">analogue</a> package builds on top of <a href="https://github.com/vegandevs/vegan">vegan</a>. It’s not useful without vegan, so it has vegan in <code>Depends</code> instead of <code>Imports</code>. Similarly, ggplot2 should really <code>Depend</code> on scales, rather than <code>Import</code>ing it.</p>
+<p>Now that you understand the importance of the namespace, let’s dive into the nitty gritty details. The two sides of the package namespace, imports and exports, are both described by the <code>NAMESPACE</code>. You’ll learn what this file looks like in the next section. In the section after that, you’ll learn the details of exporting and importing functions and other objects.</p>
+</div>
+<div id="namespace-NAMESPACE" class="section level2">
+<h2><span class="header-section-number">8.3</span> The <code>NAMESPACE</code></h2>
+<p>The following code is an excerpt of the <code>NAMESPACE</code> file from the testthat package.</p>
+<pre><code># Generated by roxygen2 (4.0.2): do not edit by hand
+S3method(as.character,expectation)
+S3method(compare,character)
+export(auto_test)
+export(auto_test_package)
+export(colourise)
+export(context)
+exportClasses(ListReporter)
+exportClasses(MinimalReporter)
+importFrom(methods,setRefClass)
+useDynLib(testthat,duplicate_)
+useDynLib(testthat,reassign_function)</code></pre>
+<p>You can see that the <code>NAMESPACE</code> file looks a bit like R code. Each line contains a <strong>directive</strong>: <code>S3method()</code>, <code>export()</code>, <code>exportClasses()</code>, and so on. Each directive describes an R object, and says whether it’s exported from this package to be used by others, or it’s imported from another package to be used locally.</p>
+<p>In total, there are eight namespace directives. Four describe exports:</p>
+<ul>
+<li><code>export()</code>: export functions (including S3 and S4 generics).</li>
+<li><code>exportPattern()</code>: export all functions that match a pattern.</li>
+<li><code>exportClasses()</code>, <code>exportMethods()</code>: export S4 classes and methods.</li>
+<li><code>S3method()</code>: export S3 methods.</li>
+</ul>
+<p>And four describe imports:</p>
+<ul>
+<li><code>import()</code>: import all functions from a package.</li>
+<li><code>importFrom()</code>: import selected functions (including S4 generics).</li>
+<li><code>importClassesFrom()</code>, <code>importMethodsFrom()</code>: import S4 classes and methods.</li>
+<li><code>useDynLib()</code>: import a function from C. This is described in more
+detail in <a href="src.html#src">compiled code</a>.</li>
+</ul>
+<p>I don’t recommend writing these directives by hand. Instead, in this chapter you’ll learn how to generate the <code>NAMESPACE</code> file with roxygen2. There are three main advantages to using roxygen2:</p>
+<ul>
+<li><p>Namespace definitions live next to its associated function, so when you
+read the code it’s easier to see what’s being imported and exported.</p></li>
+<li><p>Roxygen2 abstracts away some of the details of <code>NAMESPACE</code>. You only
+need to learn one tag, <code>@export</code>, which will automatically generate the right
+directive for functions, S3 methods, S4 methods and S4 classes.</p></li>
+<li><p>Roxygen2 makes <code>NAMESPACE</code> tidy. No matter how many times you use
+<code>@importFrom foo bar</code> you’ll only get one <code>importFrom(foo, bar)</code> in your
+<code>NAMESPACE</code>. This makes it easy to attach import directives to every function
+that need them, rather than trying to manage in one central place.</p></li>
+</ul>
+<p>Note that you can choose to use roxygen2 to generate just <code>NAMESPACE</code>, just <code>man/*.Rd</code>, or both. If you don’t use any namespace related tags, roxygen2 won’t touch <code>NAMESPACE</code>. If you don’t use any documentation related tags, roxygen2 won’t touch <code>man/</code>.</p>
+</div>
+<div id="namespace-workflow" class="section level2">
+<h2><span class="header-section-number">8.4</span> Workflow</h2>
+<p>Generating the namespace with roxygen2 is just like generating function documentation with roxygen2. You use roxygen2 blocks (starting with <code>#'</code>) and tags (starting with <code>@</code>). The workflow is the same:</p>
+<ol style="list-style-type: decimal">
+<li><p>Add roxygen comments to your <code>.R</code> files.</p></li>
+<li><p>Run <code>devtools::document()</code> (or press Ctrl/Cmd + Shift + D in RStudio) to
+convert roxygen comments to <code>.Rd</code> files.</p></li>
+<li><p>Look at <code>NAMESPACE</code> and run tests to check that the specification is
+correct.</p></li>
+<li><p>Rinse and repeat until the correct functions are exported.</p></li>
+</ol>
+</div>
+<div id="exports" class="section level2">
+<h2><span class="header-section-number">8.5</span> Exports</h2>
+<p>For a function to be usable outside of your package, you must <strong>export</strong> it. When you create a new package with <code>devtools::create()</code>, it produces a temporary <code>NAMESPACE</code> that exports everything in your package that doesn’t start with <code>.</code> (a single period). If you’re just working locally, it’s fine to export everything in your package. However, if you’re planning on sharing your package with others, it’s a really good idea to only export needed functions. This reduces the chances of a conflict with another package.</p>
+<p>To export an object, put <code>@export</code> in its roxygen block. For example:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#&#39; @export</span>
+foo &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, z) {
+  ...
+}</code></pre>
+<p>This will then generate <code>export()</code>, <code>exportMethods()</code>, <code>exportClass()</code> or <code>S3method()</code> depending on the type of the object.</p>
+<p>You export functions that you want other people to use. Exported functions must be documented, and you must be cautious when changing their interface — other people are using them! Generally, it’s better to export too little than too much. It’s easy to export things that you didn’t before; it’s hard to stop exporting a function because it might break existing code. Always err on the side of caution, and simplicity. It’s easier to give people more functionality than it is to take away stuff they’re used to.</p>
+<p>I believe that packages that have a wide audience should strive to do one thing and do it well. All functions in a package should be related to a single problem (or a set of closely related problems). Any functions not related to that purpose should not be exported. For example, most of my packages have a <code>utils.R</code> file that contains many small functions that are useful for me, but aren’t part of the core purpose of those packages. I never export these functions.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Defaults for NULL values</span>
+<span class="st">`</span><span class="dt">%||%</span><span class="st">`</span> &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) <span class="cf">if</span> (<span class="kw">is.null</span>(a)) b <span class="cf">else</span> a
 
-<span class="co"># There&#39;s a fallback method if the package isn&#39;t available</span>
-my_fun &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) {
-  <span class="cf">if</span> (<span class="kw">requireNamespace</span>(<span class="st">&quot;pkg&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)) {
-    pkg<span class="op">::</span><span class="kw">f</span>()
-  } <span class="cf">else</span> {
-    <span class="kw">g</span>()
-  }
-}</code></pre></li>
-</ul>
-<p>When developing packages locally, you never need to use <code>Suggests</code>. When releasing your package, using <code>Suggests</code> is a courtesy to your users. It frees them from downloading rarely needed packages, and lets them get started with your package as quickly as possible.</p>
-<p>The easiest way to add <code>Imports</code> and <code>Suggests</code> to your package is to use <code>devtools::use_package()</code>. This automatically puts them in the right place in your <code>DESCRIPTION</code>, and reminds you how to use them.</p>
-<pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">use_package</span>(<span class="st">&quot;dplyr&quot;</span>) <span class="co"># Defaults to imports</span>
-<span class="co">#&gt; Adding dplyr to Imports</span>
-<span class="co">#&gt; Refer to functions with dplyr::fun()</span>
-devtools<span class="op">::</span><span class="kw">use_package</span>(<span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;Suggests&quot;</span>)
-<span class="co">#&gt; Adding dplyr to Suggests</span>
-<span class="co">#&gt; Use requireNamespace(&quot;dplyr&quot;, quietly = TRUE) to test if package is </span>
-<span class="co">#&gt;  installed, then use dplyr::fun() to refer to functions.</span></code></pre>
-<div id="versioning" class="section level3">
-<h3><span class="header-section-number">4.1.1</span> Versioning</h3>
-<p>If you need a specific version of a package, specify it in parentheses after the package name:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Imports:</span>
-    ggvis (&gt;= 0.2),
-    dplyr (&gt;= 0.3.0.1)
-<span class="fu">Suggests:</span>
-    MASS (&gt;= 7.3.0)</code></pre>
-<p>You almost always want to specify a minimum version rather than an exact version (<code>MASS (== 7.3.0)</code>). Since R can’t have multiple versions of the same package loaded at the same time, specifying an exact dependency dramatically increases the chance of conflicting versions.</p>
-<p>Versioning is most important when you release your package. Usually people don’t have exactly the same versions of packages installed that you do. If someone has an older package that doesn’t have a function your package needs, they’ll get an unhelpful error message. However, if you supply the version number, they’ll get a error message that tells them exactly what the problem is: an out of date package.</p>
-<p>Generally, it’s always better to specify the version and to be conservative about which version to require. Unless you know otherwise, always require a version greater than or equal to the version you’re currently using.</p>
-</div>
-<div id="other-dependencies" class="section level3">
-<h3><span class="header-section-number">4.1.2</span> Other dependencies</h3>
-<p>There are three other fields that allow you to express more specialised dependencies:</p>
+<span class="co"># Remove NULLs from a list</span>
+compact &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
+  x[<span class="op">!</span><span class="kw">vapply</span>(x, is.null, <span class="kw">logical</span>(<span class="dv">1</span>))]
+}</code></pre>
+<p>That said, if you’re creating a package for yourself, it’s far less important to be so disciplined. Because you know what’s in your package, it’s fine to have a local “misc” package that contains a passel of functions that you find useful. But I don’t think you should release such a package.</p>
+<p>The following sections describe what you should export if you’re using S3, S4 or RC.</p>
+<div id="export-s3" class="section level3">
+<h3><span class="header-section-number">8.5.1</span> S3</h3>
+<p>If you want others to be able to create instances of an S3 class, <code>@export</code> the constructor function. S3 generics are just regular R functions, you can <code>@export</code> them like functions.</p>
+<p>S3 methods represent the most complicated case because there are four different scenarios:</p>
 <ul>
-<li><p><code>Depends</code>: Prior to the rollout of namespaces in R 2.14.0, <code>Depends</code> was
-the only way to “depend” on another package. Now, despite the name, you
-should almost always use <code>Imports</code>, not <code>Depends</code>. You’ll learn why, and
-when you should still use <code>Depends</code>, in <a href="namespace.html#namespace">namespaces</a>.</p>
-<p>You can also use <code>Depends</code> to require a specific version of R, e.g.
-<code>Depends: R (&gt;= 3.0.1)</code>. As with packages, it’s a good idea to
-play it safe and require a version greater than or equal to the version
-you’re currently using. <code>devtools::create()</code> will do this for you.</p>
-<p>In R 3.1.1 and earlier you’ll also need to use <code>Depends: methods</code> if
-you use S4. This bug is fixed in R 3.2.0, so methods can go back to
-<code>Imports</code> where they belong.</p></li>
-<li><p><code>LinkingTo</code>: packages listed here rely on C or C++ code in another package.
-You’ll learn more about <code>LinkingTo</code> in <a href="src.html#src">compiled code</a>.</p></li>
-<li><p><code>Enhances</code>: packages listed here are “enhanced” by your package. Typically,
-this means you provide methods for classes defined in another package (a
-sort of reverse <code>Suggests</code>). But it’s hard to define what that means, so I
-don’t recommend using <code>Enhances</code>.</p></li>
+<li><p>A method for an exported generic: export every method.</p></li>
+<li><p>A method for an internal generic: technically, you don’t need to export
+these methods. However, I recommend exporting every S3 method you write
+because it’s simpler and makes it less likely that you’ll introduce hard to
+find bugs. Use <code>devtools::missing_s3()</code> to list all S3 methods that
+you’ve forgotten to export.</p></li>
+<li><p>A method for a generic in a required package. You’ll need to import the
+generic (see below), and export the method.</p></li>
+<li><p>A method for a generic in a suggested package. Namespace directives must
+refer to available functions, so they can not reference suggested packages.
+It’s possible to use package hooks and code to add this at run-time,
+but this is sufficiently complicated that I currently wouldn’t recommend it.
+Instead, you’ll have to design your package dependencies in a way that avoids this
+scenario.</p></li>
 </ul>
-<p>You can also list things that your package needs outside of R in the <code>SystemRequirements</code> field. But this is just a plain text field and is not automatically checked. Think of it as a quick reference; you’ll also need to include detailed system requirements (and how to install them) in your README.</p>
 </div>
-</div>
-<div id="pkg-description" class="section level2">
-<h2><span class="header-section-number">4.2</span> Title and description: What does your package do?</h2>
-<p>The title and description fields describe what the package does. They differ only in length:</p>
-<ul>
-<li><p><code>Title</code> is a one line description of the package, and is often shown in
-package listing. It should be plain text (no markup), capitalised like a
-title, and NOT end in a period. Keep it short: listings will often
-truncate the title to 65 characters.</p></li>
-<li><p><code>Description</code> is more detailed than the title. You can use multiple sentences
-but you are limited to one paragraph. If your description spans multiple
-lines (and it should!), each line must be no more than 80 characters wide.
-Indent subsequent lines with 4 spaces.</p></li>
-</ul>
-<p>The <code>Title</code> and <code>Description</code> for ggplot2 are:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Title:</span><span class="at"> An implementation of the Grammar of Graphics</span>
-<span class="fu">Description:</span><span class="at"> An implementation of the grammar of graphics in R. It combines </span>
-    <span class="fu">the advantages of both base and lattice graphics:</span><span class="at"> conditioning and shared </span>
-    axes are handled automatically, and you can still build up a plot step 
-    by step from multiple data sources. It also implements a sophisticated 
-    multidimensional conditioning system and a consistent interface to map
-    data to aesthetic attributes. See the ggplot2 website for more information, 
-    documentation and examples.</code></pre>
-<p>A good title and description are important, especially if you plan to release your package to CRAN because they appear on the CRAN download page as follows:</p>
-<pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;diagrams/cran-package.png&quot;</span>)</code></pre>
-<p><img src="diagrams/cran-package.png" /><!-- --></p>
-<p>Because <code>Description</code> only gives you a small amount of space to describe what your package does, I also recommend including a <code>README.md</code> file that goes into much more depth and shows a few examples. You’ll learn about that in <a href="release.html#readme">README.md</a>.</p>
-</div>
-<div id="author" class="section level2">
-<h2><span class="header-section-number">4.3</span> Author: who are you?</h2>
-<p>To identify the package’s author, and whom to contact if something goes wrong, use the <code>Authors@R</code> field. This field is unusual because it contains executable R code rather than plain text. Here’s an example:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Authors@R:</span><span class="at"> person(&quot;Hadley&quot;, &quot;Wickham&quot;, email = &quot;hadley@rstudio.com&quot;,</span>
-  role = c(<span class="st">&quot;aut&quot;</span>, <span class="st">&quot;cre&quot;</span>))</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">person</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Wickham&quot;</span>, <span class="dt">email =</span> <span class="st">&quot;hadley@rstudio.com&quot;</span>, 
-  <span class="dt">role =</span> <span class="kw">c</span>(<span class="st">&quot;aut&quot;</span>, <span class="st">&quot;cre&quot;</span>))</code></pre>
-<pre><code>## [1] &quot;Hadley Wickham &lt;hadley@rstudio.com&gt; [aut, cre]&quot;</code></pre>
-<p>This command says that both the author (aut) and the maintainer (cre) is Hadley Wickham, and that his email address is <code>hadley@rstudio.com</code>. The <code>person()</code> function has four main arguments:</p>
-<ul>
-<li><p>The name, specified by the first two arguments, <code>given</code> and <code>family</code> (these
-are normally supplied by position, not name). In English cultures, <code>given</code>
-(first name) comes before <code>family</code> (last name). In many cultures, this
-convention does not hold.</p></li>
-<li><p>The <code>email</code> address.</p></li>
-<li><p>A three letter code specifying the <code>role</code>. There are four important roles:</p>
-<ul>
-<li><p><code>cre</code>: the creator or maintainer, the person you should bother
-if you have problems.</p></li>
-<li><p><code>aut</code>: authors, those who have made significant contributions to the
-package.</p></li>
-<li><p><code>ctb</code>: contributors, those who have made smaller contributions, like
-patches.</p></li>
-<li><p><code>cph</code>: copyright holder. This is used if the copyright is held by someone
-other than the author, typically a company (i.e. the author’s employer).</p></li>
-</ul>
-<p>(The <a href="http://www.loc.gov/marc/relators/relaterm.html">full list of roles</a> is
-extremely comprehensive. Should your package have a woodcutter (“wdc”),
-lyricist (“lyr”) or costume designer (“cst”), rest comfortably that you can
-correctly describe their role in creating your package.)</p></li>
-</ul>
-<p>If you need to add further clarification, you can also use the <code>comment</code> argument and supply the desired information in plain text.</p>
-<p>You can list multiple authors with <code>c()</code>:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Authors@R:</span><span class="at"> c(</span>
-    person(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Wickham&quot;</span>, email = <span class="st">&quot;hadley@rstudio.com&quot;</span>, role = <span class="st">&quot;cre&quot;</span>),
-    person(<span class="st">&quot;Winston&quot;</span>, <span class="st">&quot;Chang&quot;</span>, email = <span class="st">&quot;winston@rstudio.com&quot;</span>, role = <span class="st">&quot;aut&quot;</span>))</code></pre>
-<p>Alternatively, you can do this concisely by using <code>as.person()</code>:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Authors@R:</span><span class="at"> as.person(c(</span>
-    <span class="st">&quot;Hadley Wickham &lt;hadley@rstudio.com&gt; [aut, cre]&quot;</span>, 
-    <span class="st">&quot;Winston Chang &lt;winston@rstudio.com&gt; [aut]&quot;</span>
-  ))</code></pre>
-<p>(This only works well for names with only one first and last name.)</p>
-<p>Every package must have at least one author (aut) and one maintainer (cre) (they might be the same person). The creator must have an email address. These fields are used to generate the basic citation for the package (e.g. <code>citation(&quot;pkgname&quot;)</code>). Only people listed as authors will be included in the auto-generated citation. There are a few extra details if you’re including code that other people have written. Since this typically occurs when you’re wrapping a C library, it’s discussed in <a href="src.html#src">compiled code</a>.</p>
-<p>As well as your email address, it’s also a good idea to list other resources available for help. You can list URLs in <code>URL</code>. Multiple URLs are separated with a comma. <code>BugReports</code> is the URL where bug reports should be submitted. For example, knitr has:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">URL:</span><span class="at"> http://yihui.name/knitr/</span>
-<span class="fu">BugReports:</span><span class="at"> https://github.com/yihui/knitr/issues</span></code></pre>
-<p>You can also use separate <code>Maintainer</code> and <code>Author</code> fields. I prefer not to use these fields because <code>Authors@R</code> offers richer metadata.</p>
-<div id="on-cran" class="section level3">
-<h3><span class="header-section-number">4.3.1</span> On CRAN</h3>
-<p>The most important thing to note is that your email address (i.e., the address of <code>cre</code>) is the address that CRAN will use to contact you about your package. So make sure you use an email address that’s likely to be around for a while. Also, because this address will be used for automated mailings, CRAN policies require that this be for a single person (not a mailing list) and that it does not require any confirmation or use any filtering.</p>
-</div>
-</div>
-<div id="license" class="section level2">
-<h2><span class="header-section-number">4.4</span> License: Who can use your package?</h2>
-<p>The <code>License</code> field can be either a standard abbreviation for an open source license, like <code>GPL-2</code> or <code>BSD</code>, or a pointer to a file containing more information, <code>file LICENSE</code>. The license is really only important if you’re planning on releasing your package. If you don’t, you can ignore this section. If you want to make it clear that your package is not open source, use <code>License: file LICENSE</code> and then create a file called <code>LICENSE</code>, containing for example:</p>
-<pre><code>Proprietary 
+<div id="export-s4" class="section level3">
+<h3><span class="header-section-number">8.5.2</span> S4</h3>
+<p>S4 classes: if you want others to be able to extend your class, <code>@export</code> it.
+If you want others to create instances of your class but not to extend it,
+<code>@export</code> the constructor function, not the class.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Can extend and create with new(&quot;A&quot;, ...)</span>
+<span class="co">#&#39; @export</span>
+<span class="kw">setClass</span>(<span class="st">&quot;A&quot;</span>)
 
-Do not distribute outside of Widgets Incorporated.</code></pre>
-<p>Open source software licensing is a rich and complex field. Fortunately, in my opinion, there are only three licenses that you should consider for your R package:</p>
-<ul>
-<li><p><a href="https://tldrlegal.com/license/mit-license">MIT</a>
-(v. similar: to BSD 2 and 3 clause licenses). This is a simple and
-permissive license. It lets people use and freely distribute your code
-subject to only one restriction: the license must always be distributed
-with the code.</p>
-<p>The MIT license is a “template”, so if you use it, you need
-<code>License: MIT + file LICENSE</code>, and a <code>LICENSE</code> file that looks like this:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">YEAR:</span><span class="at"> &lt;Year or years when changes have been made&gt;</span>
-<span class="fu">COPYRIGHT HOLDER:</span><span class="at"> &lt;Name of the copyright holder&gt;</span></code></pre></li>
-<li><p><a href="https://tldrlegal.com/license/gnu-general-public-license-v2">GPL-2</a> or
-<a href="https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)">GPL-3</a>.
-These are “copy-left” licenses. This means that anyone who distributes your
-code in a bundle must license the whole bundle in a GPL-compatible way.
-Additionally, anyone who distributes modified versions of your code
-(derivative works) must also make the source code available. GPL-3 is a
-little stricter than GPL-2, closing some older loopholes.</p></li>
-<li><p><a href="https://tldrlegal.com/license/creative-commons-cc0-1.0-universal">CC0</a>.
-It relinquishes all your rights on the code and data so that it can be
-freely used by anyone for any purpose. This is sometimes called putting it
-in the public domain, a term which is neither well-defined nor meaningful in
-all countries.</p>
-<p>This license is most appropriate for data packages. Data, at least in the US,
-is not copyrightable, so you’re not really giving up much. This
-license just makes this point clear.</p></li>
-</ul>
-<p>If you’d like to learn more about other common licenses, Github’s <a href="http://choosealicense.com/licenses/">choosealicense.com</a> is a good place to start. Another good resource is <a href="https://tldrlegal.com/" class="uri">https://tldrlegal.com/</a>, which explains the most important parts of each license. If you use a license other than the three I suggest, make sure you consult the “Writing R Extensions” section on <a href="http://cran.r-project.org/doc/manuals/R-exts.html#The-DESCRIPTION-file">licensing</a>.</p>
-<p>If your package includes code that you didn’t write, you need to make sure you’re in compliance with its license. Since this occurs most commonly when you’re including C source code, it’s discussed in more detail in <a href="src.html#src">compiled code</a>.</p>
-<div id="on-cran-1" class="section level3">
-<h3><span class="header-section-number">4.4.1</span> On CRAN</h3>
-<p>If you want to release your package to CRAN, you must pick a standard license. Otherwise it’s difficult for CRAN to determine whether or not it’s legal to distribute your package! You can find a complete list of licenses that CRAN considers valid at <a href="https://svn.r-project.org/R/trunk/share/licenses/license.db" class="uri">https://svn.r-project.org/R/trunk/share/licenses/license.db</a>.</p>
-</div>
-</div>
-<div id="version" class="section level2">
-<h2><span class="header-section-number">4.5</span> Version</h2>
-<p>Formally, an R package version is a sequence of at least two integers separated by either <code>.</code> or <code>-</code>. For example, <code>1.0</code> and <code>0.9.1-10</code> are valid versions, but <code>1</code> or <code>1.0-devel</code> are not. You can parse a version number with <code>numeric_version</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">numeric_version</span>(<span class="st">&quot;1.9&quot;</span>) <span class="op">==</span><span class="st"> </span><span class="kw">numeric_version</span>(<span class="st">&quot;1.9.0&quot;</span>)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">numeric_version</span>(<span class="st">&quot;1.9.0&quot;</span>) <span class="op">&lt;</span><span class="st"> </span><span class="kw">numeric_version</span>(<span class="st">&quot;1.10.0&quot;</span>)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<p>For example, a package might have a version 1.9. This version number is considered by R to be the same as 1.9.0, less than version 1.9.2, and all of these are less than version 1.10 (which is version “one point ten”, not &quot;one point one zero). R uses version numbers to determine whether package dependencies are satisfied. A package might, for example, import package <code>devtools (&gt;= 1.9.2)</code>, in which case version 1.9 or 1.9.0 wouldn’t work.</p>
-<p>The version number of your package increases with subsequent releases of a package, but it’s more than just an incrementing counter – the way the number changes with each release can convey information about what kind of changes are in the package.</p>
-<p>I don’t recommend taking full advantage of R’s flexibility. Instead always use <code>.</code> to separate version numbers.</p>
-<ul>
-<li><p>A released version number consists of three numbers, <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code>.
-For version number 1.9.2, 1 is the major number, 9 is the minor number, and
-2 is the patch number. Never use versions like <code>1.0</code>, instead always spell
-out the three components, <code>1.0.0.</code></p></li>
-<li><p>An in-development package has a fourth component: the development version.
-This should start at 9000. For example, the first version of the package
-should be <code>0.0.0.9000</code>. There are two reasons for this recommendation:
-first, it makes it easy to see if a package is released or in-development,
-and the use of the fourth place means that you’re not limited to what the
-next version will be. <code>0.0.1</code>, <code>0.1.0</code> and <code>1.0.0</code> are all greater than
-<code>0.0.0.9000</code>.</p>
-<p>Increment the development version, e.g. from <code>9000</code> to <code>9001</code> if you’ve
-added an important feature that another development package needs to depend
-on.</p>
-<p>If you’re using svn, instead of using the arbitrary <code>9000</code>, you can
-embed the sequential revision identifier.</p></li>
-</ul>
-<p>This advice here is inspired in part by <a href="http://semver.org">Semantic Versioning</a> and by the <a href="http://www.x.org/releases/X11R7.7/doc/xorg-docs/Versions.html">X.Org</a> versioning schemes. Read them if you’d like to understand more about the standards of versioning used by many open source projects.</p>
-<p>We’ll come back to version numbers in the context of releasing your package, <a href="release.html#release-version">picking a version number</a>. For now, just remember that the first version of your package should be <code>0.0.0.9000</code>.</p>
-</div>
-<div id="description-misc" class="section level2">
-<h2><span class="header-section-number">4.6</span> Other components</h2>
-<p>A number of other fields are described elsewhere in the book:</p>
-<ul>
-<li><p><code>Collate</code> controls the order in which R files are sourced. This only
-matters if your code has side-effects; most commonly because you’re
-using S4. This is described in more depth in <a href="man.html#man-s4">documenting S4</a>.</p></li>
-<li><p><code>LazyData</code> makes it easier to access data in your package. Because it’s so
-important, it’s included in the minimal description created by devtools. It’s
-described in more detail in <a href="data.html#data">external data</a>.</p></li>
-</ul>
-<p>There are actually many other rarely, if ever, used fields. A complete list can be found in the “The DESCRIPTION file” section of the <a href="http://cran.r-project.org/doc/manuals/R-exts.html#The-DESCRIPTION-file">R extensions manual</a>. You can also create your own fields to add additional metadata. The only restrictions are that you shouldn’t use existing names and that, if you plan to submit to CRAN, the names you use should be valid English words (so a spell-checking NOTE won’t be generated).</p>
+<span class="co"># Can extend and create with new(&quot;B&quot;, ...). You can use B()</span>
+<span class="co"># to construct instances in your own code, but others can not</span>
+<span class="co">#&#39; @export</span>
+B &lt;-<span class="st"> </span><span class="kw">setClass</span>(<span class="st">&quot;B&quot;</span>)
 
+<span class="co"># Can create with C(...) and new(&quot;C&quot;, ...), but can&#39;t create</span>
+<span class="co"># a subclass that extends C</span>
+<span class="co">#&#39; @export C</span>
+C &lt;-<span class="st"> </span><span class="kw">setClass</span>(<span class="st">&quot;C&quot;</span>)
+
+<span class="co"># Can extend and create with D(...) or new(&quot;D&quot;, ...)</span>
+<span class="co">#&#39; @export D</span>
+<span class="co">#&#39; @exportClass D</span>
+D &lt;-<span class="st"> </span><span class="kw">setClass</span>(<span class="st">&quot;D&quot;</span>)</code></pre>
+<p>S4 generics: <code>@export</code> if you want the generic to be publicly usable.</p>
+<p>S4 methods: you only need to <code>@export</code> methods for generics that you did not define. But I think it’s a good idea to <code>@export</code> every method: that way you don’t need to remember whether or not you created the generic.</p>
+</div>
+<div id="export-rc" class="section level3">
+<h3><span class="header-section-number">8.5.3</span> RC</h3>
+<p>The principles used for S4 classes apply here. Note that due to the way that RC is currently implemented, it’s typically impossible for your classes to be extended outside of your package.</p>
+</div>
+<div id="export-data" class="section level3">
+<h3><span class="header-section-number">8.5.4</span> Data</h3>
+<p>As you’ll learn about in <a href="data.html#data">data</a>, files that live in <code>data/</code> don’t use the usual namespace mechanism and don’t need to be exported.</p>
+</div>
+</div>
+<div id="imports" class="section level2">
+<h2><span class="header-section-number">8.6</span> Imports</h2>
+<p><code>NAMESPACE</code> also controls which external functions can be used by your package without having to use <code>::</code>.</p>
+<p>It’s confusing that both <code>DESCRIPTION</code> (through the <code>Imports</code> field) and
+<code>NAMESPACE</code> (through import directives) seem to be involved in imports. This is just an unfortunate choice of names. The <code>Imports</code> field really has nothing to do with functions imported into the namespace: it just makes sure the package is installed when your package is. It doesn’t make functions available. You need to import functions in exactly the same way regardless of whether or not the package is attached.</p>
+<p><code>Depends</code> is just a convenience for the user: if your package is attached, it also attaches all packages listed in <code>Depends</code>. If your package is loaded, packages in <code>Depends</code> are loaded, but not attached, so you need to qualify function names with <code>::</code> or specifically import them.</p>
+<p>It’s common for packages to be listed in <code>Imports</code> in <code>DESCRIPTION</code>, but not in <code>NAMESPACE</code>. In fact, this is what I recommend: list the package in <code>DESCRIPTION</code> so that it’s installed, then always refer to it explicitly with <code>pkg::fun()</code>. Unless there is a strong reason not to, it’s better to be explicit. It’s a little more work to write, but a lot easier to read when you come back to the code in the future. The converse is not true. Every package mentioned in <code>NAMESPACE</code> must also be present in the <code>Imports</code> or <code>Depends</code> fields.</p>
+<div id="import-r" class="section level3">
+<h3><span class="header-section-number">8.6.1</span> R functions</h3>
+<p>If you are using just a few functions from another package, my recommendation is to note the package name in the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the function(s) explicitly using <code>::</code>, e.g., <code>pkg::fun()</code>. Operators can also be imported in a similar manner, e.g., <code>@importFrom magrittr %&gt;%</code>.</p>
+<p>If you are using functions repeatedly, you can avoid <code>::</code> by importing the function with <code>@importFrom pkg fun</code>. This also has a small performance benefit, because <code>::</code> adds approximately 5 µs to function evaluation time.</p>
+<p>Alternatively, if you are repeatedly using many functions from another package, you can import all of them using <code>@import package</code>. This is the least recommended solution because it makes your code harder to read (you can’t tell where a function is coming from), and if you <code>@import</code> many packages, it increases the chance of conflicting function names.</p>
+</div>
+<div id="import-s3" class="section level3">
+<h3><span class="header-section-number">8.6.2</span> S3</h3>
+<p>S3 generics are just functions, so the same rules for functions apply. S3 methods always accompany the generic, so as long as you can access the generic (either implicitly or explicitly), the methods will also be available. In other words, you don’t need to do anything special for S3 methods. As long as you’ve imported the generic, all the methods will also be available.</p>
+</div>
+<div id="import-s4" class="section level3">
+<h3><span class="header-section-number">8.6.3</span> S4</h3>
+<p>To use classes defined in another package, place <code>@importClassesFrom package ClassA ClassB ...</code> next to the classes that inherit from the imported classes, or next to the methods that implement a generic for the imported classes.</p>
+<p>To use generics defined in another package, place <code>@importMethodsFrom package GenericA GenericB ...</code> next to the methods that use the imported generics.</p>
+<p>Since S4 is implemented in the methods package, you need to make sure it’s available. This is easy to overlook because while the method package is always available in the search path when you’re working interactively, it’s not automatically loaded by <code>Rscript</code>, the tool often used to run R from the command line.</p>
+<ul>
+<li><p>Pre R 3.2.0: <code>Depends: methods</code> in <code>DESCRIPTION</code>.<br />
+Post R 3.2.0: <code>Imports: methods</code> in <code>DESCRIPTION</code>.</p></li>
+<li><p>Since you’ll being using a lot of functions from <code>methods</code>,
+you’ll probably also want to import the complete package with:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#&#39; @import methods</span>
+<span class="ot">NULL</span></code></pre>
+<p>Or you might just want to import the most commonly used functions:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#&#39; @importFrom methods setClass setGeneric setMethod setRefClass</span>
+<span class="ot">NULL</span></code></pre>
+<p>Here I’m documenting “NULL” to make it clear that these directives don’t
+apply to just one function. It doesn’t matter where they go, but if you have
+package docs, as described in <a href="man.html#man-packages">documenting packages</a>, that’s
+a natural place to put them.</p></li>
+</ul>
+</div>
+<div id="import-src" class="section level3">
+<h3><span class="header-section-number">8.6.4</span> Compiled functions</h3>
+<p>To make C/C++ functions available in R, see <a href="src.html#src">compiled code</a>.</p>
+
+</div>
 </div>
 </div>
             </section>
@@ -676,8 +673,8 @@ described in more detail in <a href="data.html#data">external data</a>.</p></li>
           </div>
         </div>
       </div>
-<a href="r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="man.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="tests.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
