@@ -138,11 +138,6 @@ PackageRoxygenize: rd,collate,namespace
 
 You don't need to modify this file by hand. Instead, use the friendly project options dialog box, accessible from the projects menu in the top-right corner of RStudio.
 
-```{r, echo = FALSE,include=FALSE}
-knitr::include_graphics("images/project-options-1.png")
-knitr::include_graphics("images/project-options-2.png")
-
-```
 
 <img width = "30%" src = "images/project-options-1.png"/><img width = "70%" src = "images/project-options-2.png"/>
 
