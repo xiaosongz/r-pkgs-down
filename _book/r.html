@@ -269,6 +269,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.6.4" data-path="namespace.html"><a href="namespace.html#import-src"><i class="fa fa-check"></i><b>8.6.4</b> Compiled functions</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="9" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>9</b> External data</a><ul>
+<li class="chapter" data-level="9.1" data-path="data.html"><a href="data.html#data-data"><i class="fa fa-check"></i><b>9.1</b> Exported data</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="data.html"><a href="data.html#documenting-data"><i class="fa fa-check"></i><b>9.1.1</b> Documenting datasets</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="data.html"><a href="data.html#data-sysdata"><i class="fa fa-check"></i><b>9.2</b> Internal data</a></li>
+<li class="chapter" data-level="9.3" data-path="data.html"><a href="data.html#data-extdata"><i class="fa fa-check"></i><b>9.3</b> Raw data</a></li>
+<li class="chapter" data-level="9.4" data-path="data.html"><a href="data.html#other-data"><i class="fa fa-check"></i><b>9.4</b> Other data</a></li>
+<li class="chapter" data-level="9.5" data-path="data.html"><a href="data.html#data-cran"><i class="fa fa-check"></i><b>9.5</b> CRAN notes</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -507,7 +516,7 @@ installed when your package is installed.</p></li>
 current environment, inserting the results of executing the code. Instead, rely
 on <code>devtools::load_all()</code> which automatically sources all files in <code>R/</code>.
 If you’re using <code>source()</code> to create a dataset, instead switch to <code>data/</code>
-as described in <a href="#data">datasets</a>.</p></li>
+as described in <a href="data.html#data">datasets</a>.</p></li>
 </ul>
 <p>Other functions need to be used with caution. If you use them, make sure to clean up after yourself with <code>on.exit()</code>:</p>
 <ul>

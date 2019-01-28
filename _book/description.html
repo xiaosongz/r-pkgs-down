@@ -269,6 +269,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.6.4" data-path="namespace.html"><a href="namespace.html#import-src"><i class="fa fa-check"></i><b>8.6.4</b> Compiled functions</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="9" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>9</b> External data</a><ul>
+<li class="chapter" data-level="9.1" data-path="data.html"><a href="data.html#data-data"><i class="fa fa-check"></i><b>9.1</b> Exported data</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="data.html"><a href="data.html#documenting-data"><i class="fa fa-check"></i><b>9.1.1</b> Documenting datasets</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="data.html"><a href="data.html#data-sysdata"><i class="fa fa-check"></i><b>9.2</b> Internal data</a></li>
+<li class="chapter" data-level="9.3" data-path="data.html"><a href="data.html#data-extdata"><i class="fa fa-check"></i><b>9.3</b> Raw data</a></li>
+<li class="chapter" data-level="9.4" data-path="data.html"><a href="data.html#other-data"><i class="fa fa-check"></i><b>9.4</b> Other data</a></li>
+<li class="chapter" data-level="9.5" data-path="data.html"><a href="data.html#data-cran"><i class="fa fa-check"></i><b>9.5</b> CRAN notes</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -565,7 +574,7 @@ matters if your code has side-effects; most commonly because you’re
 using S4. This is described in more depth in <a href="man.html#man-s4">documenting S4</a>.</p></li>
 <li><p><code>LazyData</code> makes it easier to access data in your package. Because it’s so
 important, it’s included in the minimal description created by devtools. It’s
-described in more detail in <a href="#data">external data</a>.</p></li>
+described in more detail in <a href="data.html#data">external data</a>.</p></li>
 </ul>
 <p>There are actually many other rarely, if ever, used fields. A complete list can be found in the “The DESCRIPTION file” section of the <a href="http://cran.r-project.org/doc/manuals/R-exts.html#The-DESCRIPTION-file">R extensions manual</a>. You can also create your own fields to add additional metadata. The only restrictions are that you shouldn’t use existing names and that, if you plan to submit to CRAN, the names you use should be valid English words (so a spell-checking NOTE won’t be generated).</p>
 
