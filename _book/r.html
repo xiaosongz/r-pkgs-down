@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="package-structure.html">
-<link rel="next" href="applications.html">
+<link rel="next" href="description.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -177,9 +177,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.5" data-path="r.html"><a href="r.html#r-cran"><i class="fa fa-check"></i><b>3.5</b> CRAN notes</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>4</b> Applications</a><ul>
-<li class="chapter" data-level="4.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>4.1</b> Example one</a></li>
-<li class="chapter" data-level="4.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>4.2</b> Example two</a></li>
+<li class="chapter" data-level="4" data-path="description.html"><a href="description.html"><i class="fa fa-check"></i><b>4</b> Package metadata</a><ul>
+<li class="chapter" data-level="4.1" data-path="description.html"><a href="description.html#dependencies"><i class="fa fa-check"></i><b>4.1</b> Dependencies: What does your package need?</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="description.html"><a href="description.html#versioning"><i class="fa fa-check"></i><b>4.1.1</b> Versioning</a></li>
+<li class="chapter" data-level="4.1.2" data-path="description.html"><a href="description.html#other-dependencies"><i class="fa fa-check"></i><b>4.1.2</b> Other dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="description.html"><a href="description.html#pkg-description"><i class="fa fa-check"></i><b>4.2</b> Title and description: What does your package do?</a></li>
+<li class="chapter" data-level="4.3" data-path="description.html"><a href="description.html#author"><i class="fa fa-check"></i><b>4.3</b> Author: who are you?</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="description.html"><a href="description.html#on-cran"><i class="fa fa-check"></i><b>4.3.1</b> On CRAN</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="description.html"><a href="description.html#license"><i class="fa fa-check"></i><b>4.4</b> License: Who can use your package?</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="description.html"><a href="description.html#on-cran-1"><i class="fa fa-check"></i><b>4.4.1</b> On CRAN</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="description.html"><a href="description.html#version"><i class="fa fa-check"></i><b>4.5</b> Version</a></li>
+<li class="chapter" data-level="4.6" data-path="description.html"><a href="description.html#description-misc"><i class="fa fa-check"></i><b>4.6</b> Other components</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>5</b> Final Words</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -405,7 +416,7 @@ show_mtcars &lt;-<span class="st"> </span><span class="cf">function</span>() {
   <span class="kw">library</span>(ggplot2)
   <span class="kw">qplot</span>(mpg, wt, <span class="dt">data =</span> mtcars)
 }</code></pre>
-<p>That’s also problematic, as you’ll see below. Instead, describe the packages your code needs in the <code>DESCRIPTION</code> file, as you’ll learn in <a href="#dependencies">package dependencies</a>.</p>
+<p>That’s also problematic, as you’ll see below. Instead, describe the packages your code needs in the <code>DESCRIPTION</code> file, as you’ll learn in <a href="description.html#dependencies">package dependencies</a>.</p>
 </div>
 <div id="the-r-landscape" class="section level3">
 <h3><span class="header-section-number">3.4.2</span> The R landscape</h3>
@@ -514,7 +525,7 @@ y &lt;-<span class="st"> &quot;This is a bullet \u2022&quot;</span>
         </div>
       </div>
 <a href="package-structure.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="applications.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="description.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

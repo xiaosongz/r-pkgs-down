@@ -177,9 +177,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.5" data-path="r.html"><a href="r.html#r-cran"><i class="fa fa-check"></i><b>3.5</b> CRAN notes</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>4</b> Applications</a><ul>
-<li class="chapter" data-level="4.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>4.1</b> Example one</a></li>
-<li class="chapter" data-level="4.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>4.2</b> Example two</a></li>
+<li class="chapter" data-level="4" data-path="description.html"><a href="description.html"><i class="fa fa-check"></i><b>4</b> Package metadata</a><ul>
+<li class="chapter" data-level="4.1" data-path="description.html"><a href="description.html#dependencies"><i class="fa fa-check"></i><b>4.1</b> Dependencies: What does your package need?</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="description.html"><a href="description.html#versioning"><i class="fa fa-check"></i><b>4.1.1</b> Versioning</a></li>
+<li class="chapter" data-level="4.1.2" data-path="description.html"><a href="description.html#other-dependencies"><i class="fa fa-check"></i><b>4.1.2</b> Other dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="description.html"><a href="description.html#pkg-description"><i class="fa fa-check"></i><b>4.2</b> Title and description: What does your package do?</a></li>
+<li class="chapter" data-level="4.3" data-path="description.html"><a href="description.html#author"><i class="fa fa-check"></i><b>4.3</b> Author: who are you?</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="description.html"><a href="description.html#on-cran"><i class="fa fa-check"></i><b>4.3.1</b> On CRAN</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="description.html"><a href="description.html#license"><i class="fa fa-check"></i><b>4.4</b> License: Who can use your package?</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="description.html"><a href="description.html#on-cran-1"><i class="fa fa-check"></i><b>4.4.1</b> On CRAN</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="description.html"><a href="description.html#version"><i class="fa fa-check"></i><b>4.5</b> Version</a></li>
+<li class="chapter" data-level="4.6" data-path="description.html"><a href="description.html#description-misc"><i class="fa fa-check"></i><b>4.6</b> Other components</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>5</b> Final Words</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -236,7 +247,7 @@ R’s package conventions, you get many tools for free.</p></li>
 A package with just this directory is still a useful package. (And indeed,
 if you stop reading the book after this chapter, you’ll have still learned
 some useful new skills.)</p></li>
-<li><p><a href="#description">Package metadata</a>: the <code>DESCRIPTION</code> lets you describe
+<li><p><a href="description.html#description">Package metadata</a>: the <code>DESCRIPTION</code> lets you describe
 what your package needs to work. If you’re sharing your package, you’ll also
 use the <code>DESCRIPTION</code> to describe what it does, who can use it
 (the license) and who to contact if things go wrong.</p></li>
@@ -370,6 +381,7 @@ devtools<span class="op">::</span><span class="kw">session_info</span>()</code><
 ##  devtools      2.0.1   2018-10-26 [1] CRAN (R 3.5.2)
 ##  digest        0.6.18  2018-10-10 [1] CRAN (R 3.5.0)
 ##  evaluate      0.12    2018-10-09 [1] CRAN (R 3.5.0)
+##  formatR       1.5     2017-04-25 [1] CRAN (R 3.5.0)
 ##  fs            1.2.6   2018-08-23 [1] CRAN (R 3.5.0)
 ##  glue          1.3.0   2018-07-17 [1] CRAN (R 3.5.0)
 ##  highr         0.7     2018-06-09 [1] CRAN (R 3.5.0)
