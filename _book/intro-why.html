@@ -11,21 +11,21 @@
 
   <meta property="og:title" content="Chapter 1 Introduction | R packages" />
   <meta property="og:type" content="book" />
-  
-  
+  <meta property="og:url" content="https://r-pkgs.xiaosongz.com" />
+  <meta property="og:image" content="https://r-pkgs.xiaosongz.comimages/cover.png" />
   <meta property="og:description" content="This is the book site for “R packages”." />
-  
+  <meta name="github-repo" content="hadley/r-pkgs" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 1 Introduction | R packages" />
   
   <meta name="twitter:description" content="This is the book site for “R packages”." />
-  
+  <meta name="twitter:image" content="https://r-pkgs.xiaosongz.comimages/cover.png" />
 
 <meta name="author" content="Hadley Wickham">
 
 
-<meta name="date" content="2019-01-27">
+<meta name="date" content="2019-01-28">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -370,7 +370,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="congratulations.html"><a href="congratulations.html"><i class="fa fa-check"></i><b>16</b> Congratulations!</a></li>
 <li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+<li><a href="https://github.com/hadley/r-pkgs/" target="blank">PBuilding R package - Hadley Wickham</a></li>
 
 </ul>
 
@@ -516,7 +516,7 @@ tools. For example, on Ubuntu (and Debian) you need to install the
 <p>The tools in this book wouldn’t be possible without many open source contributors. <a href="https://github.com/wch/">Winston Chang</a>, my co-author on devtools, spent hours debugging painful S4 and compiled code problems so that devtools can quickly reload code for the vast majority of packages. <a href="https://github.com/krlmlr">Kirill Müller</a> contributed great patches to many of my package development packages including devtools, testthat, and roxygen2. <a href="http://github.com/kevinushey">Kevin Ushey</a>, <a href="https://github.com/jjallaire">JJ Allaire</a> and <a href="http://dirk.eddelbuettel.com">Dirk Eddelbuettel</a> tirelessly answered all my basic C, C++ and Rcpp questions. <a href="https://github.com/klutometis">Peter Danenburg</a> and <a href="http://www.statistik.lmu.de/~eugster/">Manuel Eugster</a> wrote the first version of roxygen2 during a Google Summer of Code. <a href="https://github.com/craigcitro">Craig Citro</a> wrote much of the code to allow travis to work with R packages.</p>
 <p>Often the only way I learn how to do it the right way is by doing it the wrong way first. For suffering through many package development errors, I’d like to thank all the CRAN maintainers, especially Brian Ripley, Uwe Ligges and Kurt Hornik.</p>
 <p>This book was <a href="https://github.com/hadley/r-pkgs/">written in the open</a> and it is truly a community effort: many people read drafts, fixed typos, suggested improvements, and contributed content. Without those contributors, the book wouldn’t be nearly as good as it is, and I’m deeply grateful for their help. A special thanks goes to Peter Li, who read the book from cover-to-cover and provided many fixes. I also deeply appreciate the time the reviewers (<a href="http://www.stats.uwo.ca/faculty/murdoch/">Duncan Murdoch</a>, <a href="http://karthik.io">Karthik Ram</a>, <a href="http://vitalie.spinu.info">Vitalie Spinu</a> and <a href="https://ramnathv.github.io">Ramnath Vaidyanathan</a>) spent reading the book and giving me thorough feedback.</p>
-<p>Thanks go to all contributors who submitted improvements via github (in alphabetical order): <span class="citation">(<span class="citeproc-not-found" data-reference-id="aaronwolen"><strong>???</strong></span>)</span>, <span class="citation">(<span class="citeproc-not-found" data-reference-id="adessy"><strong>???</strong></span>)</span>, Adrien Todeschini, Andrea Cantieni, Andy Visser, <span class="citation">(<span class="citeproc-not-found" data-reference-id="apomatix"><strong>???</strong></span>)</span>, Ben Bond-Lamberty, Ben Marwick, Brett K, Brett Klamer, <span class="citation">(<span class="citeproc-not-found" data-reference-id="contravariant"><strong>???</strong></span>)</span>, Craig Citro, David Robinson, David Smith, <span class="citation">(<span class="citeproc-not-found" data-reference-id="davidkane9"><strong>???</strong></span>)</span>, Dean Attali, Eduardo Ariño de la Rubia, Federico Marini, Gerhard Nachtmann, Gerrit-Jan Schutten, Hadley Wickham, Henrik Bengtsson, <span class="citation">(<span class="citeproc-not-found" data-reference-id="heogden"><strong>???</strong></span>)</span>, Ian Gow, <span class="citation">(<span class="citeproc-not-found" data-reference-id="jacobbien"><strong>???</strong></span>)</span>, Jennifer (Jenny) Bryan, Jim Hester, <span class="citation">(<span class="citeproc-not-found" data-reference-id="jmarshallnz"><strong>???</strong></span>)</span>, Jo-Anne Tan, Joanna Zhao, Joe Cainey, John Blischak, <span class="citation">(<span class="citeproc-not-found" data-reference-id="jowalski"><strong>???</strong></span>)</span>, Justin Alford, Karl Broman, Karthik Ram, Kevin Ushey, Kun Ren, <span class="citation">(<span class="citeproc-not-found" data-reference-id="kwenzig"><strong>???</strong></span>)</span>, <span class="citation">(<span class="citeproc-not-found" data-reference-id="kylelundstedt"><strong>???</strong></span>)</span>, <span class="citation">(<span class="citeproc-not-found" data-reference-id="lancelote"><strong>???</strong></span>)</span>, Lech Madeyski, <span class="citation">(<span class="citeproc-not-found" data-reference-id="lindbrook"><strong>???</strong></span>)</span>, <span class="citation">(<span class="citeproc-not-found" data-reference-id="maiermarco"><strong>???</strong></span>)</span>, Manuel Reif, Michael Buckley, <span class="citation">(<span class="citeproc-not-found" data-reference-id="MikeLeonard"><strong>???</strong></span>)</span>, Nick Carchedi, Oliver Keyes, Patrick Kimes, Paul Blischak, Peter Meissner, <span class="citation">(<span class="citeproc-not-found" data-reference-id="PeterDee"><strong>???</strong></span>)</span>, Po Su, R. Mark Sharp, Richard M. Smith, <span class="citation">(<span class="citeproc-not-found" data-reference-id="rmar073"><strong>???</strong></span>)</span>, <span class="citation">(<span class="citeproc-not-found" data-reference-id="rmsharp"><strong>???</strong></span>)</span>, Robert Krzyzanowski, <span class="citation">(<span class="citeproc-not-found" data-reference-id="ryanatanner"><strong>???</strong></span>)</span>, Sascha Holzhauer, <span class="citation">(<span class="citeproc-not-found" data-reference-id="scharne"><strong>???</strong></span>)</span>, Sean Wilkinson, <span class="citation">(<span class="citeproc-not-found" data-reference-id="SimonPBiggs"><strong>???</strong></span>)</span>, Stefan Widgren, Stephen Frank, Stephen Rushe, Tony Breyal, Tony Fischetti, <span class="citation">(<span class="citeproc-not-found" data-reference-id="urmils"><strong>???</strong></span>)</span>, Vlad Petyuk, Winston Chang, <span class="citation">(<span class="citeproc-not-found" data-reference-id="winterschlaefer"><strong>???</strong></span>)</span>, <span class="citation">(<span class="citeproc-not-found" data-reference-id="wrathematics"><strong>???</strong></span>)</span>, <span class="citation">(<span class="citeproc-not-found" data-reference-id="zhaoy"><strong>???</strong></span>)</span>.</p>
+<p>Thanks go to all contributors who submitted improvements via github (in alphabetical order): <code>@aaronwolen</code>, <code>@adessy</code>, Adrien Todeschini, Andrea Cantieni, Andy Visser, <code>@apomatix</code>, Ben Bond-Lamberty, Ben Marwick, Brett K, Brett Klamer, <code>@contravariant</code>, Craig Citro, David Robinson, David Smith, <code>@davidkane9</code>, Dean Attali, Eduardo Ariño de la Rubia, Federico Marini, Gerhard Nachtmann, Gerrit-Jan Schutten, Hadley Wickham, Henrik Bengtsson, <code>@heogden</code>, Ian Gow, <code>@jacobbien</code>, Jennifer (Jenny) Bryan, Jim Hester, <code>@jmarshallnz</code>, Jo-Anne Tan, Joanna Zhao, Joe Cainey, John Blischak, <code>@jowalski</code>, Justin Alford, Karl Broman, Karthik Ram, Kevin Ushey, Kun Ren, <code>@kwenzig</code>, <code>@kylelundstedt</code>, <code>@lancelote</code>, Lech Madeyski, <code>@lindbrook</code>, <code>@maiermarco</code>, Manuel Reif, Michael Buckley, <code>@MikeLeonard</code>, Nick Carchedi, Oliver Keyes, Patrick Kimes, Paul Blischak, Peter Meissner, <code>@PeterDee</code>, Po Su, R. Mark Sharp, Richard M. Smith, <code>@rmar073</code>, <code>@rmsharp</code>, Robert Krzyzanowski, <code>@ryanatanner</code>, Sascha Holzhauer, <code>@scharne</code>, Sean Wilkinson, <code>@SimonPBiggs</code>, Stefan Widgren, Stephen Frank, Stephen Rushe, Tony Breyal, Tony Fischetti, <code>@urmils</code>, Vlad Petyuk, Winston Chang, <code>@winterschlaefer</code>, <code>@wrathematics</code>, <code>@zhaoy</code>.</p>
 </div>
 <div id="intro-conventions" class="section level2">
 <h2><span class="header-section-number">1.5</span> Conventions</h2>
@@ -540,7 +540,7 @@ devtools<span class="op">::</span><span class="kw">session_info</span>()</code><
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/Detroit             
-##  date     2019-01-27                  
+##  date     2019-01-28                  
 ## 
 ## ─ Packages ──────────────────────────────────────────────────────────────
 ##  package      * version date       lib source        
@@ -628,8 +628,8 @@ devtools<span class="op">::</span><span class="kw">session_info</span>()</code><
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
-"github": false,
-"facebook": true,
+"github": true,
+"facebook": false,
 "twitter": true,
 "google": false,
 "linkedin": false,
@@ -644,14 +644,14 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": null,
-"text": null
+"link": "https://github.com/hadley/r-pkgs/edit/master/01-intro.Rmd",
+"text": "Edit"
 },
 "history": {
 "link": null,
 "text": null
 },
-"download": ["r-pkgs-down.pdf", "r-pkgs-down.epub"],
+"download": null,
 "toc": {
 "collapse": "subsection"
 }
