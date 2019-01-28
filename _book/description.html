@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="r.html">
-<link rel="next" href="final-words.html">
+<link rel="next" href="man.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -192,7 +192,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.5" data-path="description.html"><a href="description.html#version"><i class="fa fa-check"></i><b>4.5</b> Version</a></li>
 <li class="chapter" data-level="4.6" data-path="description.html"><a href="description.html#description-misc"><i class="fa fa-check"></i><b>4.6</b> Other components</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>5</b> Final Words</a></li>
+<li class="chapter" data-level="5" data-path="man.html"><a href="man.html"><i class="fa fa-check"></i><b>5</b> Object documentation</a><ul>
+<li class="chapter" data-level="5.1" data-path="man.html"><a href="man.html#man-workflow"><i class="fa fa-check"></i><b>5.1</b> The documentation workflow</a></li>
+<li class="chapter" data-level="5.2" data-path="man.html"><a href="man.html#man-workflow-2"><i class="fa fa-check"></i><b>5.2</b> Alternative documentation workflow</a></li>
+<li class="chapter" data-level="5.3" data-path="man.html"><a href="man.html#roxygen-comments"><i class="fa fa-check"></i><b>5.3</b> Roxygen comments</a></li>
+<li class="chapter" data-level="5.4" data-path="man.html"><a href="man.html#man-functions"><i class="fa fa-check"></i><b>5.4</b> Documenting functions</a></li>
+<li class="chapter" data-level="5.5" data-path="man.html"><a href="man.html#man-data"><i class="fa fa-check"></i><b>5.5</b> Documenting datasets</a></li>
+<li class="chapter" data-level="5.6" data-path="man.html"><a href="man.html#man-packages"><i class="fa fa-check"></i><b>5.6</b> Documenting packages</a></li>
+<li class="chapter" data-level="5.7" data-path="man.html"><a href="man.html#man-classes"><i class="fa fa-check"></i><b>5.7</b> Documenting classes, generics and methods</a><ul>
+<li class="chapter" data-level="5.7.1" data-path="man.html"><a href="man.html#man-s3"><i class="fa fa-check"></i><b>5.7.1</b> S3</a></li>
+<li class="chapter" data-level="5.7.2" data-path="man.html"><a href="man.html#man-s4"><i class="fa fa-check"></i><b>5.7.2</b> S4</a></li>
+<li class="chapter" data-level="5.7.3" data-path="man.html"><a href="man.html#man-rc"><i class="fa fa-check"></i><b>5.7.3</b> RC</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="man.html"><a href="man.html#man-special"><i class="fa fa-check"></i><b>5.8</b> Special characters</a></li>
+<li class="chapter" data-level="5.9" data-path="man.html"><a href="man.html#dry2"><i class="fa fa-check"></i><b>5.9</b> Do repeat yourself</a><ul>
+<li class="chapter" data-level="5.9.1" data-path="man.html"><a href="man.html#inheriting-parameters-from-other-functions"><i class="fa fa-check"></i><b>5.9.1</b> Inheriting parameters from other functions</a></li>
+<li class="chapter" data-level="5.9.2" data-path="man.html"><a href="man.html#multiple-man"><i class="fa fa-check"></i><b>5.9.2</b> Documenting multiple functions in the same file</a></li>
+</ul></li>
+<li class="chapter" data-level="5.10" data-path="man.html"><a href="man.html#text-formatting"><i class="fa fa-check"></i><b>5.10</b> Text formatting reference sheet</a><ul>
+<li class="chapter" data-level="5.10.1" data-path="man.html"><a href="man.html#character-formatting"><i class="fa fa-check"></i><b>5.10.1</b> Character formatting</a></li>
+<li class="chapter" data-level="5.10.2" data-path="man.html"><a href="man.html#links"><i class="fa fa-check"></i><b>5.10.2</b> Links</a></li>
+<li class="chapter" data-level="5.10.3" data-path="man.html"><a href="man.html#lists"><i class="fa fa-check"></i><b>5.10.3</b> Lists</a></li>
+<li class="chapter" data-level="5.10.4" data-path="man.html"><a href="man.html#mathematics"><i class="fa fa-check"></i><b>5.10.4</b> Mathematics</a></li>
+<li class="chapter" data-level="5.10.5" data-path="man.html"><a href="man.html#tables"><i class="fa fa-check"></i><b>5.10.5</b> Tables</a></li>
+<li class="chapter" data-level="5.10.6" data-path="man.html"><a href="man.html#notes"><i class="fa fa-check"></i><b>5.10.6</b> Notes</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -487,7 +512,7 @@ embed the sequential revision identifier.</p></li>
 <ul>
 <li><p><code>Collate</code> controls the order in which R files are sourced. This only
 matters if your code has side-effects; most commonly because you’re
-using S4. This is described in more depth in <a href="#man-s4">documenting S4</a>.</p></li>
+using S4. This is described in more depth in <a href="man.html#man-s4">documenting S4</a>.</p></li>
 <li><p><code>LazyData</code> makes it easier to access data in your package. Because it’s so
 important, it’s included in the minimal description created by devtools. It’s
 described in more detail in <a href="#data">external data</a>.</p></li>
@@ -502,7 +527,7 @@ described in more detail in <a href="#data">external data</a>.</p></li>
         </div>
       </div>
 <a href="r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="final-words.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="man.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
