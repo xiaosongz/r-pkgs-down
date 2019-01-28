@@ -238,6 +238,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.7" data-path="vignettes.html"><a href="vignettes.html#vignette-cran"><i class="fa fa-check"></i><b>6.7</b> CRAN notes</a></li>
 <li class="chapter" data-level="6.8" data-path="vignettes.html"><a href="vignettes.html#where-next"><i class="fa fa-check"></i><b>6.8</b> Where next</a></li>
 </ul></li>
+<li class="chapter" data-level="7" data-path="tests.html"><a href="tests.html"><i class="fa fa-check"></i><b>7</b> Testing</a><ul>
+<li class="chapter" data-level="7.1" data-path="tests.html"><a href="tests.html#test-workflow"><i class="fa fa-check"></i><b>7.1</b> Test workflow</a></li>
+<li class="chapter" data-level="7.2" data-path="tests.html"><a href="tests.html#test-structure"><i class="fa fa-check"></i><b>7.2</b> Test structure</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="tests.html"><a href="tests.html#expectations"><i class="fa fa-check"></i><b>7.2.1</b> Expectations</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="tests.html"><a href="tests.html#test-tests"><i class="fa fa-check"></i><b>7.3</b> Writing tests</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="tests.html"><a href="tests.html#what-to-test"><i class="fa fa-check"></i><b>7.3.1</b> What to test</a></li>
+<li class="chapter" data-level="7.3.2" data-path="tests.html"><a href="tests.html#skipping-a-test"><i class="fa fa-check"></i><b>7.3.2</b> Skipping a test</a></li>
+<li class="chapter" data-level="7.3.3" data-path="tests.html"><a href="tests.html#building-your-own-testing-tools"><i class="fa fa-check"></i><b>7.3.3</b> Building your own testing tools</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="tests.html"><a href="tests.html#test-files"><i class="fa fa-check"></i><b>7.4</b> Test files</a></li>
+<li class="chapter" data-level="7.5" data-path="tests.html"><a href="tests.html#test-cran"><i class="fa fa-check"></i><b>7.5</b> CRAN notes</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -305,7 +318,7 @@ details of every function in your package. Vignettes give the big picture.
 They’re long-form documents that show how to combine multiple parts of your
 package to solve real problems. I’ll show you how to use Rmarkdown and knitr
 to create vignettes with a minimum of fuss.</p></li>
-<li><p><a href="#tests">Tests</a>: to ensure your package works as designed (and continues to
+<li><p><a href="tests.html#tests">Tests</a>: to ensure your package works as designed (and continues to
 work as you make changes), it’s essential to write unit tests which define
 correct behaviour, and alert you when functions break. In this chapter, I’ll
 teach you how to use the testthat package to convert the informal
@@ -436,6 +449,7 @@ devtools<span class="op">::</span><span class="kw">session_info</span>()</code><
 ##  jsonlite       1.6     2018-12-07 [1] CRAN (R 3.5.0)
 ##  knitr          1.21    2018-12-10 [1] CRAN (R 3.5.2)
 ##  later          0.7.5   2018-09-18 [1] CRAN (R 3.5.0)
+##  lubridate    * 1.7.4   2018-04-11 [1] CRAN (R 3.5.0)
 ##  magrittr       1.5     2014-11-22 [1] CRAN (R 3.5.0)
 ##  memoise        1.1.0   2017-04-21 [1] CRAN (R 3.5.0)
 ##  mime           0.6     2018-10-05 [1] CRAN (R 3.5.0)
@@ -458,7 +472,7 @@ devtools<span class="op">::</span><span class="kw">session_info</span>()</code><
 ##  sessioninfo    1.1.1   2018-11-05 [1] CRAN (R 3.5.0)
 ##  shiny        * 1.2.0   2018-11-02 [1] CRAN (R 3.5.2)
 ##  stringi        1.2.4   2018-07-20 [1] CRAN (R 3.5.0)
-##  stringr        1.3.1   2018-05-10 [1] CRAN (R 3.5.0)
+##  stringr      * 1.3.1   2018-05-10 [1] CRAN (R 3.5.0)
 ##  testthat     * 2.0.1   2018-10-13 [1] CRAN (R 3.5.0)
 ##  usethis        1.4.0   2018-08-14 [1] CRAN (R 3.5.0)
 ##  withr          2.1.2   2018-03-15 [1] CRAN (R 3.5.0)
