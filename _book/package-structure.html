@@ -251,6 +251,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4" data-path="tests.html"><a href="tests.html#test-files"><i class="fa fa-check"></i><b>7.4</b> Test files</a></li>
 <li class="chapter" data-level="7.5" data-path="tests.html"><a href="tests.html#test-cran"><i class="fa fa-check"></i><b>7.5</b> CRAN notes</a></li>
 </ul></li>
+<li class="chapter" data-level="8" data-path="namespace.html"><a href="namespace.html"><i class="fa fa-check"></i><b>8</b> Namespace</a><ul>
+<li class="chapter" data-level="8.1" data-path="namespace.html"><a href="namespace.html#namespace-motivation"><i class="fa fa-check"></i><b>8.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.2" data-path="namespace.html"><a href="namespace.html#search-path"><i class="fa fa-check"></i><b>8.2</b> Search path</a></li>
+<li class="chapter" data-level="8.3" data-path="namespace.html"><a href="namespace.html#namespace-NAMESPACE"><i class="fa fa-check"></i><b>8.3</b> The <code>NAMESPACE</code></a></li>
+<li class="chapter" data-level="8.4" data-path="namespace.html"><a href="namespace.html#namespace-workflow"><i class="fa fa-check"></i><b>8.4</b> Workflow</a></li>
+<li class="chapter" data-level="8.5" data-path="namespace.html"><a href="namespace.html#exports"><i class="fa fa-check"></i><b>8.5</b> Exports</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="namespace.html"><a href="namespace.html#export-s3"><i class="fa fa-check"></i><b>8.5.1</b> S3</a></li>
+<li class="chapter" data-level="8.5.2" data-path="namespace.html"><a href="namespace.html#export-s4"><i class="fa fa-check"></i><b>8.5.2</b> S4</a></li>
+<li class="chapter" data-level="8.5.3" data-path="namespace.html"><a href="namespace.html#export-rc"><i class="fa fa-check"></i><b>8.5.3</b> RC</a></li>
+<li class="chapter" data-level="8.5.4" data-path="namespace.html"><a href="namespace.html#export-data"><i class="fa fa-check"></i><b>8.5.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="namespace.html"><a href="namespace.html#imports"><i class="fa fa-check"></i><b>8.6</b> Imports</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="namespace.html"><a href="namespace.html#import-r"><i class="fa fa-check"></i><b>8.6.1</b> R functions</a></li>
+<li class="chapter" data-level="8.6.2" data-path="namespace.html"><a href="namespace.html#import-s3"><i class="fa fa-check"></i><b>8.6.2</b> S3</a></li>
+<li class="chapter" data-level="8.6.3" data-path="namespace.html"><a href="namespace.html#import-s4"><i class="fa fa-check"></i><b>8.6.3</b> S4</a></li>
+<li class="chapter" data-level="8.6.4" data-path="namespace.html"><a href="namespace.html#import-src"><i class="fa fa-check"></i><b>8.6.4</b> Compiled functions</a></li>
+</ul></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -338,7 +356,7 @@ Rgtk2 or RGTK2 or RGtk2.</p></li>
 <li><p>A basic <code>DESCRIPTION</code> file, which you’ll learn about in
 <a href="description.html#description">package metadata</a>.</p></li>
 <li><p>A basic <code>NAMESPACE</code> file, which you’ll learn about in
-<a href="#namespace">the namespace</a>.</p></li>
+<a href="namespace.html#namespace">the namespace</a>.</p></li>
 </ol>
 <p>It will also include an RStudio project file, <code>pkgname.Rproj</code>, that makes your package easy to use with RStudio, as described below.</p>
 <p>Don’t use <code>package.skeleton()</code> to create a package. Following that workflow actually creates more work for you because it creates extra files that you’ll have to delete or modify before you can have a working package.</p>
@@ -452,7 +470,7 @@ devtools<span class="op">::</span><span class="kw">install</span>()
 <span class="co"># Loads and _attaches_ devtools to the search path</span>
 <span class="kw">library</span>(devtools)
 <span class="kw">install</span>()</code></pre>
-<p>The distinction between loading and attaching packages is not important when you’re writing scripts, but it’s very important when you’re writing packages. You’ll learn more about the difference and why it’s important in <a href="#search-path">search path</a>.</p>
+<p>The distinction between loading and attaching packages is not important when you’re writing scripts, but it’s very important when you’re writing packages. You’ll learn more about the difference and why it’s important in <a href="namespace.html#search-path">search path</a>.</p>
 <p><code>library()</code> is not useful when you’re developing a package because you have to install the package first. In future chapters you’ll learn about <code>devtools::load_all()</code> and RStudio’s “Build and reload”, which allows you to skip install and load a source package directly into memory:</p>
 <p><img src="diagrams/loading.png" /><!-- --></p>
 </div>

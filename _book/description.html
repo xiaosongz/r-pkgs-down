@@ -251,6 +251,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4" data-path="tests.html"><a href="tests.html#test-files"><i class="fa fa-check"></i><b>7.4</b> Test files</a></li>
 <li class="chapter" data-level="7.5" data-path="tests.html"><a href="tests.html#test-cran"><i class="fa fa-check"></i><b>7.5</b> CRAN notes</a></li>
 </ul></li>
+<li class="chapter" data-level="8" data-path="namespace.html"><a href="namespace.html"><i class="fa fa-check"></i><b>8</b> Namespace</a><ul>
+<li class="chapter" data-level="8.1" data-path="namespace.html"><a href="namespace.html#namespace-motivation"><i class="fa fa-check"></i><b>8.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.2" data-path="namespace.html"><a href="namespace.html#search-path"><i class="fa fa-check"></i><b>8.2</b> Search path</a></li>
+<li class="chapter" data-level="8.3" data-path="namespace.html"><a href="namespace.html#namespace-NAMESPACE"><i class="fa fa-check"></i><b>8.3</b> The <code>NAMESPACE</code></a></li>
+<li class="chapter" data-level="8.4" data-path="namespace.html"><a href="namespace.html#namespace-workflow"><i class="fa fa-check"></i><b>8.4</b> Workflow</a></li>
+<li class="chapter" data-level="8.5" data-path="namespace.html"><a href="namespace.html#exports"><i class="fa fa-check"></i><b>8.5</b> Exports</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="namespace.html"><a href="namespace.html#export-s3"><i class="fa fa-check"></i><b>8.5.1</b> S3</a></li>
+<li class="chapter" data-level="8.5.2" data-path="namespace.html"><a href="namespace.html#export-s4"><i class="fa fa-check"></i><b>8.5.2</b> S4</a></li>
+<li class="chapter" data-level="8.5.3" data-path="namespace.html"><a href="namespace.html#export-rc"><i class="fa fa-check"></i><b>8.5.3</b> RC</a></li>
+<li class="chapter" data-level="8.5.4" data-path="namespace.html"><a href="namespace.html#export-data"><i class="fa fa-check"></i><b>8.5.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="namespace.html"><a href="namespace.html#imports"><i class="fa fa-check"></i><b>8.6</b> Imports</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="namespace.html"><a href="namespace.html#import-r"><i class="fa fa-check"></i><b>8.6.1</b> R functions</a></li>
+<li class="chapter" data-level="8.6.2" data-path="namespace.html"><a href="namespace.html#import-s3"><i class="fa fa-check"></i><b>8.6.2</b> S3</a></li>
+<li class="chapter" data-level="8.6.3" data-path="namespace.html"><a href="namespace.html#import-s4"><i class="fa fa-check"></i><b>8.6.3</b> S4</a></li>
+<li class="chapter" data-level="8.6.4" data-path="namespace.html"><a href="namespace.html#import-src"><i class="fa fa-check"></i><b>8.6.4</b> Compiled functions</a></li>
+</ul></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -317,7 +335,7 @@ useful when you read your code in the future.</p>
 verbose. There’s also a minor performance penalty associated with <code>::</code>
 (on the order of 5µs, so it will only matter if you call the function
 millions of times). You’ll learn about alternative ways to call functions
-in other packages in <a href="#imports">namespace imports</a>.</p></li>
+in other packages in <a href="namespace.html#imports">namespace imports</a>.</p></li>
 <li><p><code>Suggests</code>: your package can use these packages, but doesn’t require them.
 You might use suggested packages for example datasets, to run tests,
 build vignettes, or maybe there’s only one function that needs the package.</p>
@@ -370,7 +388,7 @@ devtools<span class="op">::</span><span class="kw">use_package</span>(<span clas
 <li><p><code>Depends</code>: Prior to the rollout of namespaces in R 2.14.0, <code>Depends</code> was
 the only way to “depend” on another package. Now, despite the name, you
 should almost always use <code>Imports</code>, not <code>Depends</code>. You’ll learn why, and
-when you should still use <code>Depends</code>, in <a href="#namespace">namespaces</a>.</p>
+when you should still use <code>Depends</code>, in <a href="namespace.html#namespace">namespaces</a>.</p>
 <p>You can also use <code>Depends</code> to require a specific version of R, e.g.
 <code>Depends: R (&gt;= 3.0.1)</code>. As with packages, it’s a good idea to
 play it safe and require a version greater than or equal to the version

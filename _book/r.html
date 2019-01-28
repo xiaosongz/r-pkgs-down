@@ -251,6 +251,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4" data-path="tests.html"><a href="tests.html#test-files"><i class="fa fa-check"></i><b>7.4</b> Test files</a></li>
 <li class="chapter" data-level="7.5" data-path="tests.html"><a href="tests.html#test-cran"><i class="fa fa-check"></i><b>7.5</b> CRAN notes</a></li>
 </ul></li>
+<li class="chapter" data-level="8" data-path="namespace.html"><a href="namespace.html"><i class="fa fa-check"></i><b>8</b> Namespace</a><ul>
+<li class="chapter" data-level="8.1" data-path="namespace.html"><a href="namespace.html#namespace-motivation"><i class="fa fa-check"></i><b>8.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.2" data-path="namespace.html"><a href="namespace.html#search-path"><i class="fa fa-check"></i><b>8.2</b> Search path</a></li>
+<li class="chapter" data-level="8.3" data-path="namespace.html"><a href="namespace.html#namespace-NAMESPACE"><i class="fa fa-check"></i><b>8.3</b> The <code>NAMESPACE</code></a></li>
+<li class="chapter" data-level="8.4" data-path="namespace.html"><a href="namespace.html#namespace-workflow"><i class="fa fa-check"></i><b>8.4</b> Workflow</a></li>
+<li class="chapter" data-level="8.5" data-path="namespace.html"><a href="namespace.html#exports"><i class="fa fa-check"></i><b>8.5</b> Exports</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="namespace.html"><a href="namespace.html#export-s3"><i class="fa fa-check"></i><b>8.5.1</b> S3</a></li>
+<li class="chapter" data-level="8.5.2" data-path="namespace.html"><a href="namespace.html#export-s4"><i class="fa fa-check"></i><b>8.5.2</b> S4</a></li>
+<li class="chapter" data-level="8.5.3" data-path="namespace.html"><a href="namespace.html#export-rc"><i class="fa fa-check"></i><b>8.5.3</b> RC</a></li>
+<li class="chapter" data-level="8.5.4" data-path="namespace.html"><a href="namespace.html#export-data"><i class="fa fa-check"></i><b>8.5.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="namespace.html"><a href="namespace.html#imports"><i class="fa fa-check"></i><b>8.6</b> Imports</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="namespace.html"><a href="namespace.html#import-r"><i class="fa fa-check"></i><b>8.6.1</b> R functions</a></li>
+<li class="chapter" data-level="8.6.2" data-path="namespace.html"><a href="namespace.html#import-s3"><i class="fa fa-check"></i><b>8.6.2</b> S3</a></li>
+<li class="chapter" data-level="8.6.3" data-path="namespace.html"><a href="namespace.html#import-s4"><i class="fa fa-check"></i><b>8.6.3</b> S4</a></li>
+<li class="chapter" data-level="8.6.4" data-path="namespace.html"><a href="namespace.html#import-src"><i class="fa fa-check"></i><b>8.6.4</b> Compiled functions</a></li>
+</ul></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -342,7 +360,7 @@ average &lt;-<span class="st"> </span><span class="kw">mean</span>(feet <span cl
 
 <span class="co"># Bad</span>
 average&lt;-<span class="kw">mean</span>(feet<span class="op">/</span><span class="dv">12</span><span class="op">+</span>inches,<span class="dt">na.rm=</span><span class="ot">TRUE</span>)</code></pre>
-<p>There’s a small exception to this rule: <code>:</code>, <code>::</code> and <code>:::</code> don’t need spaces around them. (If you haven’t seen <code>::</code> or <code>:::</code> before, don’t worry - you’ll learn all about them in <a href="#namespace">namespaces</a>.)</p>
+<p>There’s a small exception to this rule: <code>:</code>, <code>::</code> and <code>:::</code> don’t need spaces around them. (If you haven’t seen <code>::</code> or <code>:::</code> before, don’t worry - you’ll learn all about them in <a href="namespace.html#namespace">namespaces</a>.)</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Good</span>
 x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
 base<span class="op">::</span>get
@@ -513,7 +531,7 @@ is often the hardest part!) to create new visualisations.</p></li>
 </div>
 <div id="when-you-do-need-side-effects" class="section level3">
 <h3><span class="header-section-number">3.4.3</span> When you <strong>do</strong> need side-effects</h3>
-<p>Occasionally, packages do need side-effects. This is most common if your package talks to an external system — you might need to do some initial setup when the package loads. To do that, you can use two special functions: <code>.onLoad()</code> and <code>.onAttach()</code>. These are called when the package is loaded and attached. You’ll learn about the distinction between the two in <a href="#namespace">Namespaces</a>. For now, you should always use <code>.onLoad()</code> unless explicitly directed otherwise.</p>
+<p>Occasionally, packages do need side-effects. This is most common if your package talks to an external system — you might need to do some initial setup when the package loads. To do that, you can use two special functions: <code>.onLoad()</code> and <code>.onAttach()</code>. These are called when the package is loaded and attached. You’ll learn about the distinction between the two in <a href="namespace.html#namespace">Namespaces</a>. For now, you should always use <code>.onLoad()</code> unless explicitly directed otherwise.</p>
 <p>Some common uses of <code>.onLoad()</code> and <code>.onAttach()</code> are:</p>
 <ul>
 <li><p>To display an informative message when the package loads. This might make

@@ -251,6 +251,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4" data-path="tests.html"><a href="tests.html#test-files"><i class="fa fa-check"></i><b>7.4</b> Test files</a></li>
 <li class="chapter" data-level="7.5" data-path="tests.html"><a href="tests.html#test-cran"><i class="fa fa-check"></i><b>7.5</b> CRAN notes</a></li>
 </ul></li>
+<li class="chapter" data-level="8" data-path="namespace.html"><a href="namespace.html"><i class="fa fa-check"></i><b>8</b> Namespace</a><ul>
+<li class="chapter" data-level="8.1" data-path="namespace.html"><a href="namespace.html#namespace-motivation"><i class="fa fa-check"></i><b>8.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.2" data-path="namespace.html"><a href="namespace.html#search-path"><i class="fa fa-check"></i><b>8.2</b> Search path</a></li>
+<li class="chapter" data-level="8.3" data-path="namespace.html"><a href="namespace.html#namespace-NAMESPACE"><i class="fa fa-check"></i><b>8.3</b> The <code>NAMESPACE</code></a></li>
+<li class="chapter" data-level="8.4" data-path="namespace.html"><a href="namespace.html#namespace-workflow"><i class="fa fa-check"></i><b>8.4</b> Workflow</a></li>
+<li class="chapter" data-level="8.5" data-path="namespace.html"><a href="namespace.html#exports"><i class="fa fa-check"></i><b>8.5</b> Exports</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="namespace.html"><a href="namespace.html#export-s3"><i class="fa fa-check"></i><b>8.5.1</b> S3</a></li>
+<li class="chapter" data-level="8.5.2" data-path="namespace.html"><a href="namespace.html#export-s4"><i class="fa fa-check"></i><b>8.5.2</b> S4</a></li>
+<li class="chapter" data-level="8.5.3" data-path="namespace.html"><a href="namespace.html#export-rc"><i class="fa fa-check"></i><b>8.5.3</b> RC</a></li>
+<li class="chapter" data-level="8.5.4" data-path="namespace.html"><a href="namespace.html#export-data"><i class="fa fa-check"></i><b>8.5.4</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="namespace.html"><a href="namespace.html#imports"><i class="fa fa-check"></i><b>8.6</b> Imports</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="namespace.html"><a href="namespace.html#import-r"><i class="fa fa-check"></i><b>8.6.1</b> R functions</a></li>
+<li class="chapter" data-level="8.6.2" data-path="namespace.html"><a href="namespace.html#import-s3"><i class="fa fa-check"></i><b>8.6.2</b> S3</a></li>
+<li class="chapter" data-level="8.6.3" data-path="namespace.html"><a href="namespace.html#import-s4"><i class="fa fa-check"></i><b>8.6.3</b> S4</a></li>
+<li class="chapter" data-level="8.6.4" data-path="namespace.html"><a href="namespace.html#import-src"><i class="fa fa-check"></i><b>8.6.4</b> Compiled functions</a></li>
+</ul></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -323,7 +341,7 @@ work as you make changes), it’s essential to write unit tests which define
 correct behaviour, and alert you when functions break. In this chapter, I’ll
 teach you how to use the testthat package to convert the informal
 interactive tests that you’re already doing to formal, automated tests.</p></li>
-<li><p><a href="#namespace">Namespace</a>: to play nicely with others, your package needs
+<li><p><a href="namespace.html#namespace">Namespace</a>: to play nicely with others, your package needs
 to define what functions it makes available to other packages and what
 functions it requires from other packages. This is the job of the <code>NAMESPACE</code>
 file and I’ll show you how to use roxygen2 to generate it for you.
