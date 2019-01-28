@@ -1,5 +1,7 @@
 This is a bookdown conversion of [R packages by Hadley Wickham](http://r-pkgs.had.co.nz)
 
+The preview of bookdown format of this book currently available at [Here]( https://r-pkgs.xiaosongz.com)
+
 --------------------------------------------
 
 Contributing
