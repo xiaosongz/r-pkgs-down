@@ -278,6 +278,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.4" data-path="data.html"><a href="data.html#other-data"><i class="fa fa-check"></i><b>9.4</b> Other data</a></li>
 <li class="chapter" data-level="9.5" data-path="data.html"><a href="data.html#data-cran"><i class="fa fa-check"></i><b>9.5</b> CRAN notes</a></li>
 </ul></li>
+<li class="chapter" data-level="10" data-path="src.html"><a href="src.html"><i class="fa fa-check"></i><b>10</b> Compiled code</a><ul>
+<li class="chapter" data-level="10.1" data-path="src.html"><a href="src.html#cpp"><i class="fa fa-check"></i><b>10.1</b> C++</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="src.html"><a href="src.html#cpp-workflow"><i class="fa fa-check"></i><b>10.1.1</b> Workflow</a></li>
+<li class="chapter" data-level="10.1.2" data-path="src.html"><a href="src.html#cpp-man"><i class="fa fa-check"></i><b>10.1.2</b> Documentation</a></li>
+<li class="chapter" data-level="10.1.3" data-path="src.html"><a href="src.html#cpp-export"><i class="fa fa-check"></i><b>10.1.3</b> Exporting C++ code</a></li>
+<li class="chapter" data-level="10.1.4" data-path="src.html"><a href="src.html#cpp-import"><i class="fa fa-check"></i><b>10.1.4</b> Importing C++ code</a></li>
+<li class="chapter" data-level="10.1.5" data-path="src.html"><a href="src.html#cpp-best-practices"><i class="fa fa-check"></i><b>10.1.5</b> Best practices</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="src.html"><a href="src.html#clang"><i class="fa fa-check"></i><b>10.2</b> C</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="src.html"><a href="src.html#getting-started-with-.call"><i class="fa fa-check"></i><b>10.2.1</b> Getting started with <code>.Call()</code></a></li>
+<li class="chapter" data-level="10.2.2" data-path="src.html"><a href="src.html#getting-started-with-.c"><i class="fa fa-check"></i><b>10.2.2</b> Getting started with <code>.C()</code></a></li>
+<li class="chapter" data-level="10.2.3" data-path="src.html"><a href="src.html#c-workflow"><i class="fa fa-check"></i><b>10.2.3</b> Workflow</a></li>
+<li class="chapter" data-level="10.2.4" data-path="src.html"><a href="src.html#c-export"><i class="fa fa-check"></i><b>10.2.4</b> Exporting C code</a></li>
+<li class="chapter" data-level="10.2.5" data-path="src.html"><a href="src.html#c-import"><i class="fa fa-check"></i><b>10.2.5</b> Importing C code</a></li>
+<li class="chapter" data-level="10.2.6" data-path="src.html"><a href="src.html#c-best-practices"><i class="fa fa-check"></i><b>10.2.6</b> Best practices</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="src.html"><a href="src.html#src-debugging"><i class="fa fa-check"></i><b>10.3</b> Debugging compiled code</a></li>
+<li class="chapter" data-level="10.4" data-path="src.html"><a href="src.html#make"><i class="fa fa-check"></i><b>10.4</b> Makefiles</a></li>
+<li class="chapter" data-level="10.5" data-path="src.html"><a href="src.html#src-other"><i class="fa fa-check"></i><b>10.5</b> Other languages</a></li>
+<li class="chapter" data-level="10.6" data-path="src.html"><a href="src.html#src-licensing"><i class="fa fa-check"></i><b>10.6</b> Licensing</a></li>
+<li class="chapter" data-level="10.7" data-path="src.html"><a href="src.html#src-workflow"><i class="fa fa-check"></i><b>10.7</b> Development workflow</a></li>
+<li class="chapter" data-level="10.8" data-path="src.html"><a href="src.html#src-cran"><i class="fa fa-check"></i><b>10.8</b> CRAN issues</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -360,7 +383,7 @@ package but it’s critical to master if you want your package to work reliably.
 data with your package. You might do this to bundle data
 in a way that’s easy for R users to access, or just to provide compelling
 examples in your documentation.</p></li>
-<li><p><a href="#src">Compiled code</a>: R code is designed for human efficiency, not computer
+<li><p><a href="src.html#src">Compiled code</a>: R code is designed for human efficiency, not computer
 efficiency, so it’s useful to have a tool in your back pocket that allows you
 to write fast code. The <code>src/</code> directory allows you to include speedy
 compiled C and C++ code to solve performance bottlenecks in your package.</p></li>

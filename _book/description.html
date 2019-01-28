@@ -278,6 +278,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.4" data-path="data.html"><a href="data.html#other-data"><i class="fa fa-check"></i><b>9.4</b> Other data</a></li>
 <li class="chapter" data-level="9.5" data-path="data.html"><a href="data.html#data-cran"><i class="fa fa-check"></i><b>9.5</b> CRAN notes</a></li>
 </ul></li>
+<li class="chapter" data-level="10" data-path="src.html"><a href="src.html"><i class="fa fa-check"></i><b>10</b> Compiled code</a><ul>
+<li class="chapter" data-level="10.1" data-path="src.html"><a href="src.html#cpp"><i class="fa fa-check"></i><b>10.1</b> C++</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="src.html"><a href="src.html#cpp-workflow"><i class="fa fa-check"></i><b>10.1.1</b> Workflow</a></li>
+<li class="chapter" data-level="10.1.2" data-path="src.html"><a href="src.html#cpp-man"><i class="fa fa-check"></i><b>10.1.2</b> Documentation</a></li>
+<li class="chapter" data-level="10.1.3" data-path="src.html"><a href="src.html#cpp-export"><i class="fa fa-check"></i><b>10.1.3</b> Exporting C++ code</a></li>
+<li class="chapter" data-level="10.1.4" data-path="src.html"><a href="src.html#cpp-import"><i class="fa fa-check"></i><b>10.1.4</b> Importing C++ code</a></li>
+<li class="chapter" data-level="10.1.5" data-path="src.html"><a href="src.html#cpp-best-practices"><i class="fa fa-check"></i><b>10.1.5</b> Best practices</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="src.html"><a href="src.html#clang"><i class="fa fa-check"></i><b>10.2</b> C</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="src.html"><a href="src.html#getting-started-with-.call"><i class="fa fa-check"></i><b>10.2.1</b> Getting started with <code>.Call()</code></a></li>
+<li class="chapter" data-level="10.2.2" data-path="src.html"><a href="src.html#getting-started-with-.c"><i class="fa fa-check"></i><b>10.2.2</b> Getting started with <code>.C()</code></a></li>
+<li class="chapter" data-level="10.2.3" data-path="src.html"><a href="src.html#c-workflow"><i class="fa fa-check"></i><b>10.2.3</b> Workflow</a></li>
+<li class="chapter" data-level="10.2.4" data-path="src.html"><a href="src.html#c-export"><i class="fa fa-check"></i><b>10.2.4</b> Exporting C code</a></li>
+<li class="chapter" data-level="10.2.5" data-path="src.html"><a href="src.html#c-import"><i class="fa fa-check"></i><b>10.2.5</b> Importing C code</a></li>
+<li class="chapter" data-level="10.2.6" data-path="src.html"><a href="src.html#c-best-practices"><i class="fa fa-check"></i><b>10.2.6</b> Best practices</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="src.html"><a href="src.html#src-debugging"><i class="fa fa-check"></i><b>10.3</b> Debugging compiled code</a></li>
+<li class="chapter" data-level="10.4" data-path="src.html"><a href="src.html#make"><i class="fa fa-check"></i><b>10.4</b> Makefiles</a></li>
+<li class="chapter" data-level="10.5" data-path="src.html"><a href="src.html#src-other"><i class="fa fa-check"></i><b>10.5</b> Other languages</a></li>
+<li class="chapter" data-level="10.6" data-path="src.html"><a href="src.html#src-licensing"><i class="fa fa-check"></i><b>10.6</b> Licensing</a></li>
+<li class="chapter" data-level="10.7" data-path="src.html"><a href="src.html#src-workflow"><i class="fa fa-check"></i><b>10.7</b> Development workflow</a></li>
+<li class="chapter" data-level="10.8" data-path="src.html"><a href="src.html#src-cran"><i class="fa fa-check"></i><b>10.8</b> CRAN issues</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -406,7 +429,7 @@ you’re currently using. <code>devtools::create()</code> will do this for you.<
 you use S4. This bug is fixed in R 3.2.0, so methods can go back to
 <code>Imports</code> where they belong.</p></li>
 <li><p><code>LinkingTo</code>: packages listed here rely on C or C++ code in another package.
-You’ll learn more about <code>LinkingTo</code> in <a href="#src">compiled code</a>.</p></li>
+You’ll learn more about <code>LinkingTo</code> in <a href="src.html#src">compiled code</a>.</p></li>
 <li><p><code>Enhances</code>: packages listed here are “enhanced” by your package. Typically,
 this means you provide methods for classes defined in another package (a
 sort of reverse <code>Suggests</code>). But it’s hard to define what that means, so I
@@ -484,7 +507,7 @@ correctly describe their role in creating your package.)</p></li>
     <span class="st">&quot;Winston Chang &lt;winston@rstudio.com&gt; [aut]&quot;</span>
   ))</code></pre>
 <p>(This only works well for names with only one first and last name.)</p>
-<p>Every package must have at least one author (aut) and one maintainer (cre) (they might be the same person). The creator must have an email address. These fields are used to generate the basic citation for the package (e.g. <code>citation(&quot;pkgname&quot;)</code>). Only people listed as authors will be included in the auto-generated citation. There are a few extra details if you’re including code that other people have written. Since this typically occurs when you’re wrapping a C library, it’s discussed in <a href="#src">compiled code</a>.</p>
+<p>Every package must have at least one author (aut) and one maintainer (cre) (they might be the same person). The creator must have an email address. These fields are used to generate the basic citation for the package (e.g. <code>citation(&quot;pkgname&quot;)</code>). Only people listed as authors will be included in the auto-generated citation. There are a few extra details if you’re including code that other people have written. Since this typically occurs when you’re wrapping a C library, it’s discussed in <a href="src.html#src">compiled code</a>.</p>
 <p>As well as your email address, it’s also a good idea to list other resources available for help. You can list URLs in <code>URL</code>. Multiple URLs are separated with a comma. <code>BugReports</code> is the URL where bug reports should be submitted. For example, knitr has:</p>
 <pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">URL:</span><span class="at"> http://yihui.name/knitr/</span>
 <span class="fu">BugReports:</span><span class="at"> https://github.com/yihui/knitr/issues</span></code></pre>
@@ -528,7 +551,7 @@ is not copyrightable, so you’re not really giving up much. This
 license just makes this point clear.</p></li>
 </ul>
 <p>If you’d like to learn more about other common licenses, Github’s <a href="http://choosealicense.com/licenses/">choosealicense.com</a> is a good place to start. Another good resource is <a href="https://tldrlegal.com/" class="uri">https://tldrlegal.com/</a>, which explains the most important parts of each license. If you use a license other than the three I suggest, make sure you consult the “Writing R Extensions” section on <a href="http://cran.r-project.org/doc/manuals/R-exts.html#The-DESCRIPTION-file">licensing</a>.</p>
-<p>If your package includes code that you didn’t write, you need to make sure you’re in compliance with its license. Since this occurs most commonly when you’re including C source code, it’s discussed in more detail in <a href="#src">compiled code</a>.</p>
+<p>If your package includes code that you didn’t write, you need to make sure you’re in compliance with its license. Since this occurs most commonly when you’re including C source code, it’s discussed in more detail in <a href="src.html#src">compiled code</a>.</p>
 <div id="on-cran-1" class="section level3">
 <h3><span class="header-section-number">4.4.1</span> On CRAN</h3>
 <p>If you want to release your package to CRAN, you must pick a standard license. Otherwise it’s difficult for CRAN to determine whether or not it’s legal to distribute your package! You can find a complete list of licenses that CRAN considers valid at <a href="https://svn.r-project.org/R/trunk/share/licenses/license.db" class="uri">https://svn.r-project.org/R/trunk/share/licenses/license.db</a>.</p>
