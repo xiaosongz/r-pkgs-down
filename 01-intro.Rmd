@@ -164,6 +164,7 @@ Often the only way I learn how to do it the right way is by doing it the wrong w
 
 This book was [written in the open](https://github.com/hadley/r-pkgs/) and it is truly a community effort: many people read drafts, fixed typos, suggested improvements, and contributed content. Without those contributors, the book wouldn't be nearly as good as it is, and I'm deeply grateful for their help. A special thanks goes to Peter Li, who read the book from cover-to-cover and provided many fixes. I also deeply appreciate the time the reviewers ([Duncan Murdoch](http://www.stats.uwo.ca/faculty/murdoch/), [Karthik Ram](http://karthik.io), [Vitalie Spinu](http://vitalie.spinu.info) and [Ramnath Vaidyanathan](https://ramnathv.github.io)) spent reading the book and giving me thorough feedback.
 
+
 ```{r, results = "asis", echo = FALSE, eval = TRUE}
 # git --no-pager shortlog -ns > contribs.txt
 contribs <- read.delim("data/contribs.txt", header = FALSE, 
@@ -172,7 +173,7 @@ names(contribs) <- c("n", "name")
 
 contribs <- contribs[order(contribs$name), ]
 contribs$uname <- ifelse(!grepl(" ", contribs$name), 
-  paste0("@", contribs$name), contribs$name)
+  paste0("`@", contribs$name,"`"), contribs$name)
 
 cat("Thanks go to all contributors who submitted improvements via github (in alphabetical order): ")
 cat(paste0(contribs$uname, collapse = ", "))
