@@ -1,7 +1,10 @@
 This is a bookdown conversion of [R packages by Hadley Wickham](http://r-pkgs.had.co.nz)
 
-The preview of bookdown format of this book currently available at [Here]( https://r-pkgs.xiaosongz.com)
+~~The preview of bookdown format of this book currently available at [Here]( https://r-pkgs.xiaosongz.com)~~
 
+This repo had been merged into Hadley's official version, https://github.com/hadley/r-pkgs/pull/521. 
+
+The official bookdown site for this book now at: https://r-pkgs.org
 --------------------------------------------
 
 Contributing
